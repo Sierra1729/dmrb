@@ -1,0 +1,1 @@
+{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"event_id":"FIRE-001","date":"2027-03-14","cause":"unknown","type":"forest_fire","tree_biomass_burnt":"n","regrowth_check_date":"2027-09-14","evidence_ids":[]},"geometry":{"type":"Polygon","coordinates":[[[79.08,21.14],[79.09,21.14],[79.09,21.15],[79.08,21.15],[79.08,21.14]]]}}]}

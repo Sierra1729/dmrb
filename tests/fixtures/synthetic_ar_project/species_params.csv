@@ -1,0 +1,4 @@
+species_code,scientific_name,wood_density_t_m3,bef2,root_shoot_method,root_shoot_value,allometric_eq_id,source_citation
+TECGRA,Tectona grandis,0.55,1.15,formula,,ALLO-TECGRA-01,Forest Research Institute India
+DALSI,Dalbergia sissoo,0.65,1.15,formula,,ALLO-DALSI-01,Forest Research Institute India
+ACACAT,Acacia catechu,0.72,1.15,formula,,ALLO-ACACAT-01,Forest Research Institute India

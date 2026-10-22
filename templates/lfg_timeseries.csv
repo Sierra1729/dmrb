@@ -1,0 +1,2 @@
+instrument_id,timestamp,flow_m3,ch4_vol_frac,temperature_c,pressure_kpa,flare_status,normalised
+FM-01,2027-01-01T00:00:00+05:30,812.4,0.52,34.1,101.6,on,n

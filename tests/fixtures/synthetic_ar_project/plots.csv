@@ -1,0 +1,7 @@
+plot_id,stratum_id,plot_type,shape,radius_m,plot_area_ha,center_lat,center_lon,gps_accuracy_m,permanent,measurement_date,team_id
+P-S1-001,S1,fixed,circle,11.28,0.04,21.145,79.085,2.5,y,2026-11-10,TEAM-A
+P-S1-002,S1,fixed,circle,11.28,0.04,21.147,79.087,2.8,y,2026-11-10,TEAM-A
+P-S2-001,S2,fixed,circle,11.28,0.04,21.165,79.105,3.1,y,2026-11-11,TEAM-B
+P-S2-002,S2,fixed,circle,11.28,0.04,21.167,79.107,2.9,y,2026-11-11,TEAM-B
+P-S3-001,S3,fixed,circle,11.28,0.04,21.185,79.125,2.2,y,2026-11-12,TEAM-A
+P-S3-002,S3,fixed,circle,11.28,0.04,21.187,79.127,2.4,y,2026-11-12,TEAM-A

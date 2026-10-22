@@ -1,0 +1,2 @@
+stratum_id,project_id,scenario,name,area_ha_declared,geometry_wkt,climate_zone,soil_class,land_use,management,input_level,crown_cover_tree,crown_cover_shrub,notes
+S1,PRJ-001,PROJ,Teak block A,60.0,POLYGON((...)),tropical_moist,LAC,plantation,,,,0.10,

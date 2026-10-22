@@ -1,0 +1,14 @@
+plot_id,tree_no,species_code,status,dbh_cm,height_m,coppice,remarks
+P-S1-001,1,TECGRA,live,15.2,11.5,n,healthy
+P-S1-001,2,TECGRA,live,18.4,13.0,n,healthy
+P-S1-001,3,TECGRA,live,12.8,10.2,n,healthy
+P-S1-002,1,TECGRA,live,16.0,12.2,n,healthy
+P-S1-002,2,TECGRA,live,19.5,14.1,n,healthy
+P-S2-001,1,DALSI,live,14.2,9.8,n,good vigor
+P-S2-001,2,DALSI,live,17.0,11.4,n,good vigor
+P-S2-002,1,DALSI,live,15.8,10.5,n,good vigor
+P-S2-002,2,DALSI,live,20.1,13.2,n,good vigor
+P-S3-001,1,ACACAT,live,11.5,7.5,n,agroforestry row
+P-S3-001,2,ACACAT,live,13.2,8.4,n,agroforestry row
+P-S3-002,1,ACACAT,live,12.0,7.8,n,agroforestry row
+P-S3-002,2,ACACAT,live,14.5,9.0,n,agroforestry row

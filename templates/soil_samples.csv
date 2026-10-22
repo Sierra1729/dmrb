@@ -1,0 +1,2 @@
+sample_id,field_id,lat,lon,gps_accuracy_m,date,depth_top_cm,depth_bottom_cm,composite_n_cores,core_diameter_mm,fine_soil_mass_g,sample_volume_cm3,bd_g_cm3,cfr_pct,soc_pct,method,lab_id,lab_se,calibration_or_validation
+SS-0001,FLD-0001,20.9374,77.7796,3.0,2027-05-15,0,30,10,50,,,1.32,2,0.62,dry_combustion,<lab>,0.02,validation

@@ -1,0 +1,740 @@
+{
+  "AR0004_uncertainty_definition_example": {
+    "source": "BM-T-AR-0004 v1.0, section 2 para 4 (PDF p.4)",
+    "inputs": {
+      "n": 34,
+      "mean_t_dm_ha": 45.328,
+      "sd_t_dm_ha": 12.776
+    },
+    "expected": {
+      "sem": 2.191,
+      "t_0.1_33": 1.692,
+      "uncertainty_pct": 8.18
+    },
+    "rel_tol": 0.001,
+    "note": "Document prints SEM 2.191, t 1.692, U 8.18 %."
+  },
+  "AR0004_discount_example": {
+    "source": "BM-T-AR-0004 v1.0, Appendix 2 Table 1 (PDF p.29)",
+    "inputs": {
+      "mean": 60.0,
+      "half_width_90": 9.0
+    },
+    "expected": {
+      "U_pct": 15.0,
+      "discount_fraction": 0.25,
+      "baseline_conservative": 62.25,
+      "project_conservative": 57.75
+    },
+    "rel_tol": 1e-09,
+    "note": "Document prints 62.25 (baseline) and 57.75 (project). Boundary: 10<U<=15 -> 25 %."
+  },
+  "AR0004_root_shoot_function": {
+    "source": "BM-T-AR-0004 v1.0, Appendix 1 (PDF p.26); BM-T-AR-0003 DPT 7",
+    "inputs": {
+      "b_above_ground_t_dm_ha": [
+        10.0,
+        50.0,
+        150.0
+      ]
+    },
+    "expected": {
+      "R": [
+        0.2847019797478752,
+        0.2525731140458039,
+        0.23274978981385724
+      ]
+    },
+    "rel_tol": 1e-09,
+    "note": ""
+  },
+  "AR0004_stratified_random_sampling": {
+    "source": "BM-T-AR-0004 v1.0, Eq. 12-17 + Appendix 2 (PDF p.14-15, 29)",
+    "inputs": {
+      "strata": {
+        "S1": {
+          "area_ha": 60.0,
+          "plots_b": [
+            40.0,
+            44.0,
+            52.0,
+            48.0,
+            36.0
+          ]
+        },
+        "S2": {
+          "area_ha": 40.0,
+          "plots_b": [
+            20.0,
+            26.0,
+            23.0,
+            31.0
+          ]
+        }
+      },
+      "CF_TREE": 0.47
+    },
+    "expected": {
+      "per_stratum": {
+        "S1": {
+          "mean": 44.0,
+          "s2": 40.0,
+          "w": 0.6
+        },
+        "S2": {
+          "mean": 25.0,
+          "s2": 22.0,
+          "w": 0.4
+        }
+      },
+      "b_TREE_t_dm_ha": 36.4,
+      "t_val_df": 7,
+      "t_val": 1.8945786050900062,
+      "u_C_fraction": 0.10092648947457966,
+      "B_TREE_t_dm": 3640.0,
+      "C_TREE_tCO2e": 6272.9333333333325,
+      "C_TREE_conservative_project_tCO2e": 6114.657048322982
+    },
+    "rel_tol": 1e-09,
+    "note": "u_C is a fraction; >10 % triggers Appendix-2 discount. The discount is applied to the mean (equivalently to C_TREE) using the same half-width."
+  },
+  "AR0004_double_sampling": {
+    "source": "BM-T-AR-0004 v1.0, Eq. 18-19, Appendix 3 (PDF p.16-17, 30)",
+    "inputs": {
+      "sub_sample_biomass": [
+        30.0,
+        42.0,
+        55.0,
+        61.0,
+        38.0,
+        47.0
+      ],
+      "sub_sample_secondary": [
+        0.4,
+        0.52,
+        0.66,
+        0.74,
+        0.47,
+        0.58
+      ],
+      "all_plots_secondary": [
+        0.4,
+        0.52,
+        0.66,
+        0.74,
+        0.47,
+        0.58,
+        0.45,
+        0.5,
+        0.7,
+        0.62,
+        0.55,
+        0.48,
+        0.6,
+        0.68,
+        0.43,
+        0.57,
+        0.51,
+        0.64
+      ]
+    },
+    "expected": {
+      "rho": 0.9982392992299398,
+      "beta": 90.48025613660617,
+      "alpha": 0.3333333333333333,
+      "mean_secondary_all": 0.5611111111111111,
+      "mean_secondary_sub": 0.5616666666666666,
+      "b_TREE_i": 45.44973319103522,
+      "s2_i": 43.06759871931696
+    },
+    "rel_tol": 1e-09,
+    "note": "Eq.19 result s2_i is then used in Eq.15 as s_i^2 / n_i with n_i = sub-sample size."
+  },
+  "AR0004_proportionate_crown_cover": {
+    "source": "BM-T-AR-0004 v1.0, Eq. 9-10 (change) and Eq. 20-21 (stock) (PDF p.12, 18)",
+    "inputs": {
+      "CF": 0.47,
+      "b_FOREST": 120.0,
+      "R_TREE": 0.25,
+      "strata": [
+        {
+          "CC": 0.04,
+          "A": 25.0
+        },
+        {
+          "CC": 0.02,
+          "A": 15.0
+        }
+      ],
+      "delta_b_FOREST_t_dm_ha_yr": 3.0,
+      "threshold_rule": "mean pre-project CC < 0.20 x 0.30 = 0.06"
+    },
+    "expected": {
+      "C_TREE_BSL_tCO2e": 336.05,
+      "delta_C_TREE_BSL_tCO2e_per_yr": 8.401250000000001
+    },
+    "rel_tol": 1e-09,
+    "note": ""
+  },
+  "AR0004_shrubs": {
+    "source": "BM-T-AR-0004 v1.0, Eq. 26-27, para 67-68 (PDF p.20)",
+    "inputs": {
+      "CF_S": 0.47,
+      "R_S": 0.4,
+      "BDR_SF": 0.1,
+      "b_FOREST": 120.0,
+      "strata": [
+        {
+          "CC": 0.3,
+          "A": 20.0
+        },
+        {
+          "CC": 0.04,
+          "A": 10.0
+        }
+      ]
+    },
+    "expected": {
+      "C_SHRUB_tCO2e": 173.71199999999996
+    },
+    "rel_tol": 1e-09,
+    "note": "Stratum with CC < 5 % is set to zero (para 67). Para 68 says 'greater than 5 %'; exactly 5 % is treated as non-zero here (see errata E-AR4-06)."
+  },
+  "AR0004_annual_change_fractional_T": {
+    "source": "BM-T-AR-0004 v1.0, Eq. 11 (PDF p.13)",
+    "inputs": {
+      "C_t1": 1200.0,
+      "C_t2": 2525.0,
+      "T_years": 4.416666666666667
+    },
+    "expected": {
+      "T_rounded_doc": 4.417,
+      "delta_C_per_year": 300.0
+    },
+    "rel_tol": 1e-09,
+    "note": ""
+  },
+  "AR0004_difference_method_uncertainty": {
+    "source": "BM-T-AR-0004 v1.0, Eq. 1-2 (PDF p.7)",
+    "inputs": {
+      "C_t1": 1200.0,
+      "C_t2": 2525.0,
+      "u1": 0.08,
+      "u2": 0.12
+    },
+    "expected": {
+      "delta_C": 1325.0,
+      "u_deltaC": 0.23988249170283502
+    },
+    "rel_tol": 1e-09,
+    "note": ""
+  },
+  "AR0003_deadwood_plot": {
+    "source": "BM-T-AR-0003 v1.0, Eq. 2-6 (PDF p.6-9)",
+    "inputs": {
+      "a_plot_ha": 0.05,
+      "D_j": 0.55,
+      "L_m": 100.0,
+      "lying_pieces_cm_beta": [
+        [
+          12.0,
+          1.0
+        ],
+        [
+          15.0,
+          0.8
+        ],
+        [
+          22.0,
+          0.45
+        ]
+      ],
+      "CF_TREE": 0.5,
+      "stump": {
+        "DBH_m": 0.3,
+        "H_STUMP_m": 5.0,
+        "H_DBH_m": 1.3,
+        "beta": 0.8,
+        "R_j": 0.25
+      },
+      "standing": {
+        "agb_t_dm": [
+          0.35,
+          0.6
+        ],
+        "alpha": [
+          0.975,
+          0.8
+        ],
+        "R_j": 0.25
+      }
+    },
+    "expected": {
+      "C_DWL_tCO2e": 0.3369945580238208,
+      "D_MID_STUMP_m": 0.21757587292444797,
+      "C_DW_STUMP_tCO2e": 0.1874500148598821,
+      "B_DW_TREE_t_dm": 1.0265625,
+      "C_DWS_TREE_tCO2e": 1.88203125
+    },
+    "rel_tol": 1e-09,
+    "note": "Eq.1 as printed shows (1+D_j); implement (1+R_j) (errata E-AR3-01). Eq.4 precedence: H/(H - H_DBH) (errata E-AR3-02)."
+  },
+  "AR0003_deadwood_stratum": {
+    "source": "BM-T-AR-0003 v1.0, Eq. 7 (PDF p.9)",
+    "inputs": {
+      "A_i": 50.0,
+      "A_plot_i": 0.05,
+      "plot_total_tCO2e": 2.406475822883703
+    },
+    "expected": {
+      "C_DW_i_tCO2e": 2406.4758228837027
+    },
+    "rel_tol": 1e-09,
+    "note": ""
+  },
+  "AR0003_litter_plot": {
+    "source": "BM-T-AR-0003 v1.0, Eq. 12 (PDF p.12)",
+    "inputs": {
+      "B_LI_wet_kg": 2.0,
+      "DWR": 0.4,
+      "A_p_ha": 0.05,
+      "a_p_m2": 0.5,
+      "CF_LI": 0.37
+    },
+    "expected": {
+      "C_LI_plot_tCO2e": 0.27133333333333337
+    },
+    "rel_tol": 1e-09,
+    "note": "2.5 = (10 000 m2/ha / 1 000 kg/t) / 4 frames."
+  },
+  "AR0003_default_factors": {
+    "source": "BM-T-AR-0003 v1.0, Eq. 9, 15, DPT 5-6 (PDF p.10, 13, 15-16)",
+    "inputs": {
+      "C_TREE_i_tCO2e": 5000.0,
+      "biome": "Tropical",
+      "elevation": "<2000m",
+      "precip": "1000-1600"
+    },
+    "expected": {
+      "DF_DW_pct": 1,
+      "DF_LI_pct": 1,
+      "C_DW_i_tCO2e": 50.0,
+      "C_LI_i_tCO2e": 50.0
+    },
+    "rel_tol": 1e-09,
+    "note": "DF values are printed in per cent; divide by 100."
+  },
+  "AR0002_fire_components": {
+    "source": "BM-T-AR-0002 v1.0, Eq. 3, 4, 5, 7, 8 (PDF p.4-8)",
+    "inputs": {
+      "forest_fire": {
+        "A_BURN_ha": 10.0,
+        "b_TREE_tL": 80.0,
+        "COMF": 0.46,
+        "EF_CH4": 6.8,
+        "EF_N2O": 0.2
+      },
+      "site_prep": {
+        "A_SPF": 12.0,
+        "CF_TREE": 0.5,
+        "b_TREE": 5.0,
+        "BDR_SF": 0.1,
+        "CF_SHRUB": 0.5,
+        "CC_SHRUB": 0.3,
+        "B_FOREST": 120.0
+      },
+      "harvest_residue": {
+        "B_FOREST": 120.0,
+        "BEF2": 1.25,
+        "A_FMF": 8.0,
+        "f_BL": 0.25,
+        "CF": 0.5
+      },
+      "dom": {
+        "A_BURN": 10.0,
+        "c_DW_per_ha": 6.0,
+        "c_LI_per_ha": 4.0
+      }
+    },
+    "expected": {
+      "GHG_FF_TREE_tool_GWP_tCO2e": 75.3664,
+      "GHG_FF_TREE_AR6_GWP_tCO2e": 94.66432000000002,
+      "GHG_SPF_tCO2e": 13.244,
+      "B_HARVEST_t_dm": 768.0,
+      "GHG_FMF_tCO2e": 24.64,
+      "GHG_FF_DOM_tCO2e": 7.000000000000001
+    },
+    "rel_tol": 1e-09,
+    "note": "Tool prints GWP 21/310; CCTS Detailed Procedure requires latest IPCC GWP100 (see errata E-GWP-01). DOM stocks must be per-hectare (errata E-AR2-03)."
+  },
+  "AR0005_leakage_displacement": {
+    "source": "BM-T-AR-0005 v1.0, Eq. 1-3 (PDF p.4-6)",
+    "inputs": {
+      "b_TREE": 30.0,
+      "R_TREE": 0.25,
+      "b_SHRUB": 4.0,
+      "R_S": 0.4,
+      "CF": 0.47,
+      "A_DISP": 15.0,
+      "SOC_REF": 47.0,
+      "before": [
+        1.0,
+        0.97,
+        1.0
+      ],
+      "after": [
+        0.48,
+        1.0,
+        0.92
+      ]
+    },
+    "expected": {
+      "delta_C_BIOMASS_tC": 330.2925,
+      "delta_SOC_LUC_tC": 372.522,
+      "LK_AGRIC_tCO2e": 2576.9864999999995
+    },
+    "rel_tol": 1e-09,
+    "note": "Receiving land: moderately degraded tropical grassland (fLU 1, fMG 0.97, fIN 1) converted to long-term cultivated tropical moist cropland, full tillage, low input. Eq.2 multiplies by CF, so its unit is t C, not t d.m. as printed (errata E-AR5-01)."
+  },
+  "AR0006_soc_tropical_moist_LAC": {
+    "source": "BM-T-AR-0006 v1.0, Eq. 1-8, Tables 4-6 (PDF p.4-10)",
+    "inputs": {
+      "SOC_REF": 47.0,
+      "f_LU": 0.48,
+      "f_MG": 1.0,
+      "f_IN": 0.92,
+      "disturbance_gt_10pct": true,
+      "t_PREP": 1,
+      "A_i_ha": 100.0
+    },
+    "expected": {
+      "SOC_INITIAL": 20.7552,
+      "SOC_LOSS": 2.07552,
+      "dSOC_by_year_t1_to_t23": [
+        -2.07552,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.8,
+        0.0,
+        0.0
+      ],
+      "delta_SOC_AL_tCO2e_by_year": [
+        -761.0239999999999,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        293.3333333333333,
+        0.0,
+        0.0
+      ]
+    },
+    "rel_tol": 1e-09,
+    "note": "Uncapped rate = (47-(20.7552-2.07552))/20 = 1.416 -> capped at 0.8 tC/ha/yr. Rate is zero after t_PREP+20 (implicit; errata E-AR6-04)."
+  },
+  "T011_FOD_applicationB_MSW_yearly": {
+    "source": "BM-T-011 v1.0, Eq. 1 + default tables (PDF p.5, 14-20)",
+    "inputs": {
+      "W_x_t_per_year": 10000.0,
+      "years_disposed": "x = 1..y (constant stream)",
+      "composition": {
+        "food": 0.55,
+        "paper_cardboard": 0.12,
+        "garden": 0.1,
+        "wood": 0.03,
+        "inert": 0.2
+      },
+      "DOC_k": {
+        "food": [
+          0.15,
+          0.4
+        ],
+        "paper_cardboard": [
+          0.4,
+          0.07
+        ],
+        "garden": [
+          0.2,
+          0.17
+        ],
+        "wood": [
+          0.43,
+          0.035
+        ],
+        "inert": [
+          0.0,
+          0.0
+        ]
+      },
+      "phi": 0.85,
+      "f_y": 0.0,
+      "GWP_CH4": 29.8,
+      "OX": 0.1,
+      "F": 0.5,
+      "DOC_f": 0.5,
+      "MCF": 1.0
+    },
+    "expected": {
+      "BE_CH4_SWDS_tCO2e_y1_to_y10": [
+        2584.7304441477722,
+        4433.095381830926,
+        5776.709326915098,
+        6772.141912396421,
+        7525.480937922178,
+        8108.823439518545,
+        8571.352012790536,
+        8946.778192469535,
+        9258.347779562346,
+        9522.209509032476
+      ]
+    },
+    "rel_tol": 1e-09,
+    "note": "Application B, baseline, humid tropical (phi_default 0.85), anaerobic managed SWDS (MCF 1.0). GWP from CCTS rule (latest IPCC GWP100; BEE methodologies use 29.8)."
+  },
+  "T011_phi_option2": {
+    "source": "BM-T-011 v1.0, Eq. 3-4, Table 3 (PDF p.8-9)",
+    "inputs": {
+      "a": 0.02,
+      "b": 0.1,
+      "c": 0.05,
+      "d": 0.0,
+      "e": 0.0,
+      "g": 0.2
+    },
+    "expected": {
+      "V_y": 0.23,
+      "phi_y": 0.8130081300813008
+    },
+    "rel_tol": 1e-09,
+    "note": "Eq.4 printed as 'phi=1(1+V)'; implemented as 1/(1+V) (errata E-T11-02)."
+  },
+  "T011_MCF_water_table": {
+    "source": "BM-T-011 v1.0, Eq. 12 (PDF p.14)",
+    "inputs": {
+      "d_y_m": 10.0,
+      "h_w_y_m": 3.0
+    },
+    "expected": {
+      "MCF_y": 0.8
+    },
+    "rel_tol": 1e-09,
+    "note": ""
+  },
+  "T011_DOCf_from_BMP": {
+    "source": "BM-T-011 v1.0, Eq. 9 (PDF p.12)",
+    "inputs": {
+      "BMP_MSW_tCH4_per_t": 0.035,
+      "F": 0.5,
+      "p_j": {
+        "food": 0.55,
+        "paper_cardboard": 0.12,
+        "garden": 0.1,
+        "wood": 0.03,
+        "inert": 0.2
+      }
+    },
+    "expected": {
+      "sum_p_DOC": 0.16340000000000002,
+      "DOC_f_y": 0.22490820073439408
+    },
+    "rel_tol": 1e-09,
+    "note": ""
+  },
+  "SOCMG_validation_metrics": {
+    "source": "DRAFT SOC Model Requirements & Guidelines, Table 3 Eq. 12-25, paras 76-77 (PDF p.33-35)",
+    "inputs": {
+      "observed_t_ha": [
+        42.1,
+        55.3,
+        38.7,
+        61.2,
+        47.5,
+        50.9,
+        44.0,
+        58.6,
+        39.9,
+        52.4,
+        46.8,
+        49.1,
+        57.0,
+        41.3,
+        53.8,
+        45.2,
+        60.1,
+        48.4,
+        43.6,
+        51.7
+      ],
+      "predicted_t_ha": [
+        44.0,
+        53.1,
+        40.2,
+        58.9,
+        49.0,
+        49.5,
+        45.8,
+        56.0,
+        42.3,
+        51.0,
+        47.9,
+        50.2,
+        55.1,
+        43.0,
+        52.6,
+        46.1,
+        57.7,
+        47.3,
+        45.5,
+        50.3
+      ],
+      "interval_halfwidth": 2.5
+    },
+    "expected": {
+      "n": 20,
+      "mean_obs": 49.38,
+      "mean_pred": 49.275,
+      "s": 6.814736354324162,
+      "bias": -0.10500000000000007,
+      "rmse": 1.7554201776213008,
+      "R2": 0.9301541753364795,
+      "SE": 1.523821373700792,
+      "MoE_90": 2.634889536163604,
+      "PICP": 0.95,
+      "s_PICP": 0.22360679774997896,
+      "t_PICP": 0.9999999999999988,
+      "pass_bias": true,
+      "pass_rmse": true,
+      "pass_r2": true
+    },
+    "rel_tol": 1e-09,
+    "note": "Residual sign: r_i = predicted - observed (Eq.16), so positive bias = over-estimation. MoE uses two-sided 90 % t with n-1 df (Eq.21). Doc Example E1.1 shows +/-2.36 for SE 1.19, which matches 95 %, not 90 % - follow Eq.21 (errata E-SOCMG-03)."
+  },
+  "SOCMG_sample_size": {
+    "source": "DRAFT SOC Model Guidelines Box 5 Eq. 6-7 (PDF p.26)",
+    "inputs": {
+      "alpha": 0.1,
+      "s_t_ha": 12.0,
+      "MoE_t_ha": 2.5
+    },
+    "expected": {
+      "z_alpha/2": 1.6448536269514722,
+      "n_raw": 62.33572118235831,
+      "n_required": 63
+    },
+    "rel_tol": 1e-09,
+    "note": ""
+  },
+  "SOCMG_residual_trend_change": {
+    "source": "DRAFT SOC Model Guidelines Annex A Table A.6 Eq. 26-35 (PDF p.56)",
+    "inputs": {
+      "t_n": [
+        2015.0,
+        2015.0,
+        2015.0,
+        2015.0,
+        2015.0,
+        2020.0,
+        2020.0,
+        2020.0,
+        2020.0,
+        2020.0
+      ],
+      "e_n": [
+        -1.2,
+        0.4,
+        0.9,
+        -0.3,
+        0.1,
+        0.6,
+        1.3,
+        -0.2,
+        0.8,
+        0.5
+      ],
+      "mu_pred_t": 48.0,
+      "mu_pred_t_prime": 50.5,
+      "t": 2025.0,
+      "t_prime": 2030.0
+    },
+    "expected": {
+      "beta1": 0.124,
+      "beta0": -249.88,
+      "sigma2_resid": 0.46099999999999997,
+      "mu_delta": 3.12,
+      "MoE_90": 0.7985237916783671
+    },
+    "rel_tol": 1e-09,
+    "note": "T_{alpha/2,N-2} read as the two-sided 90 % critical value (one-sided 0.95 quantile)."
+  },
+  "SOCAT_fertiliser_increase": {
+    "source": "DRAFT SOC Activity Tool (cover crops) Eq. 2; zero tillage Eq. 2 (PDF p.75, 147)",
+    "inputs": {
+      "EF_FE_as_printed": 0.01,
+      "FE_PR_kgN_by_year": [
+        1200.0,
+        1300.0,
+        1250.0,
+        1400.0,
+        1350.0
+      ],
+      "FE_BL_kgN": 1100.0
+    },
+    "expected": {
+      "delta_FE_tCO2e_as_printed": 10.0,
+      "EF_FE_IPCC_EF1_converted_tCO2e_per_kgN": 0.00429,
+      "delta_FE_tCO2e_converted": 4.29
+    },
+    "rel_tol": 1e-09,
+    "note": "0.01 is the IPCC EF1 in kg N2O-N per kg N, not tCO2e/kgN (errata E-SOCAT-01). Default to the printed (more conservative) value until BEE clarifies; show both in the report."
+  },
+  "SOCAT_yield_leakage": {
+    "source": "DRAFT SOC Activity Tool (zero tillage) Eq. 8 printed as (7) (PDF p.150-151)",
+    "inputs": {
+      "CY_BL": 4000.0,
+      "CY_min_prev": 3900.0,
+      "CY_t": 3700.0,
+      "A_bar": 120.0,
+      "dBC_LA": 0.0,
+      "dSOC_LA": 2.0,
+      "dFE_LA": 0.3,
+      "dFU_LA": 0.1
+    },
+    "expected": {
+      "LK_t0_tCO2e": 14.399999999999999
+    },
+    "rel_tol": 1e-09,
+    "note": "Interpretation: CY_min = lowest 5-yr running mean in previously verified periods incl. baseline (so year-1 CY_min = CY_BL); the current period is charged only for the incremental drop below it. Flag for BEE confirmation (errata E-SOCAT-03)."
+  }
+}

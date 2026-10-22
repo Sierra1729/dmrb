@@ -1,0 +1,266 @@
+# Parameter catalogue: default values transcribed from the source PDFs.
+# Load into the engine's ParameterRegistry at startup. Each entry is immutable per version;
+# changes require a new catalogue version and a migration note.
+# Keys: tool, symbol, value, unit, source (doc + page/table/eq), notes, errata.
+
+catalogue_version: "2026.10-01"
+gwp_sets:
+  AR6:            {CH4: 29.8, N2O: 273, source: "IPCC AR6 WG1 Table 7.15 (values used in BEE methodologies)"}
+  SAR_as_printed: {CH4: 21,   N2O: 310, source: "BM-T-AR-0002 v1.0 Eq.7 parameter table", errata: E-GWP-01}
+default_gwp_set: AR6
+
+global:
+  forest_threshold_crown_cover: {value: 0.30, unit: fraction, source: "BM-T-AR-0004 paras 26, 56", errata: E-AR4-08}
+  proportionate_crown_cover_limit_factor: {value: 0.20, unit: fraction, source: "BM-T-AR-0004 paras 26, 55"}
+  uncertainty_threshold_pct: {value: 10, source: "BM-T-AR-0004 paras 20, 24, 38, 48, 61"}
+  confidence_level: {value: 0.90, source: "BM-T-AR-0004 section 2; SOC FM section 9"}
+  C_to_CO2: {value: 3.6666666666666665, expr: "44/12"}
+  CH4_C_to_CH4: {value: 1.3333333333333333, expr: "16/12"}
+
+uncertainty_discount_table:   # BM-T-AR-0004 Appendix 2 Table 1 (PDF p.29)
+  - {u_max_pct: 10,  discount_fraction_of_halfwidth: 0.00}
+  - {u_max_pct: 15,  discount_fraction_of_halfwidth: 0.25}
+  - {u_max_pct: 20,  discount_fraction_of_halfwidth: 0.50}
+  - {u_max_pct: 30,  discount_fraction_of_halfwidth: 0.75}
+  - {u_max_pct: .inf, discount_fraction_of_halfwidth: 1.00}
+
+BM-T-AR-0004:
+  CF_TREE: {value: 0.47, unit: "t C / t d.m.", source: "Eq.3, 10, 12, 21 variable lists"}
+  CF_S:    {value: 0.47, unit: "t C / t d.m.", source: "Eq.26"}
+  R_TREE_baseline: {value: 0.25, source: "Eq.10, 21"}
+  R_S:     {value: 0.40, source: "Eq.26"}
+  BDR_SF:  {value: 0.10, source: "Eq.27"}
+  BEF2_ex_post: {value: 1.15, source: "Appendix 1 para 5"}
+  root_shoot_formula: {expr: "exp(-1.085 + 0.9256*ln(b))/b", b: "AGB t d.m./ha", source: "Appendix 1 para 5"}
+  shrub_cc_zero_below: {value: 0.05, source: "para 67", errata: E-AR4-06}
+  shrub_cc_cyclic_baseline: {value: 0.5, source: "DPT 2 comment"}
+
+BM-T-AR-0003:
+  CF_TREE: {value: 0.5, unit: "t C / t d.m.", source: "DPT 2", errata: E-CF-01}
+  CF_LI:   {value: 0.37, unit: "t C / t d.m.", source: "DPT 3, Eq.12"}
+  alpha_dead_tree: {leaves_twigs_lost: 0.975, small_branches_lost: 0.80, source: "para 12"}
+  beta_decay_class: {sound: 1.00, intermediate: 0.80, rotten: 0.45, source: "para 21"}
+  ormerod: {coef: 0.57, exponent: 0.80, source: "Eq.4"}
+  litter_factor: {value: 2.5, source: "Eq.12", note: "= 10 / n_frames with 4 frames"}
+  transect_min_total_length_m: 100
+  lying_deadwood_min_diameter_cm: 10
+  DF_DW_pct:   # DPT 5
+    - {biome: tropical, elevation: "<2000", precip: "<1000", value: 2}
+    - {biome: tropical, elevation: "<2000", precip: "1000-1600", value: 1}
+    - {biome: tropical, elevation: "<2000", precip: ">1600", value: 6}
+    - {biome: tropical, elevation: ">2000", precip: all, value: 7}
+    - {biome: temperate_boreal, elevation: all, precip: all, value: 8}
+  DF_LI_pct:   # DPT 6
+    - {biome: tropical, elevation: "<2000", precip: "<1000", value: 4}
+    - {biome: tropical, elevation: "<2000", precip: "1000-1600", value: 1}
+    - {biome: tropical, elevation: "<2000", precip: ">1600", value: 1}
+    - {biome: tropical, elevation: ">2000", precip: all, value: 1}
+    - {biome: temperate_boreal, elevation: all, precip: all, value: 4}
+
+BM-T-AR-0002:
+  non_co2_to_co2_ratio: {value: 0.07, source: "Eq.3, 4, 8 (IPCC 2006 Table 2.5 adapted)"}
+  CF_TREE: {value: 0.50, source: "Eq.3, 4"}
+  CF_SHRUB: {value: 0.50, source: "Eq.3"}
+  BDR_SF: {value: 0.10, source: "Eq.3, DPT"}
+  f_BL: {tropical: 0.25, temperate: 0.10, source: "Eq.4"}
+  BEF2_harvest: {value: 1.25, source: "Eq.5"}
+  fire_area_threshold_fraction_of_project: {value: 0.05, source: "para 4"}
+  COMF:
+    tropical: [{age_min: 3, age_max: 5, value: 0.46}, {age_min: 6, age_max: 10, value: 0.67},
+               {age_min: 11, age_max: 17, value: 0.50}, {age_min: 18, age_max: .inf, value: 0.32}]
+    boreal: 0.40
+    temperate: 0.45
+    note: "Tropical age < 3 years not tabulated: require project-specific value"
+  EF_CH4_g_per_kg_dm: {tropical: 6.8, other: 4.7}
+  EF_N2O_g_per_kg_dm: {tropical: 0.20, other: 0.26}
+
+BM-T-AR-0005:
+  CF: {value: 0.47, source: "Eq.2 (page image)"}
+  R_TREE: {value: 0.25, source: "Eq.2"}
+  R_S: {value: 0.40, source: "Eq.2"}
+  dead_organic_matter_factor: {value: 1.1, source: "Eq.2 note"}
+
+BM-T-AR-0006:
+  soc_loss_fraction: {value: 0.1, source: "Eq.2"}
+  disturbance_threshold_fraction: {value: 0.10, source: "para 11"}
+  transition_years: {value: 20, source: "Eq.6"}
+  max_rate_tC_ha_yr: {value: 0.8, source: "Eq.7"}
+  SOC_REF_tC_ha_0_30cm:   # Table 4 (PDF p.8-9); null = NA
+    boreal:                 {HAC: 68, LAC: null, sandy: 10, spodic: 117, volcanic: 20}
+    cold_temperate_dry:     {HAC: 50, LAC: 33,  sandy: 34, spodic: null, volcanic: 20}
+    cold_temperate_moist:   {HAC: 95, LAC: 85,  sandy: 71, spodic: 115, volcanic: 130}
+    warm_temperate_dry:     {HAC: 38, LAC: 24,  sandy: 19, spodic: null, volcanic: 70}
+    warm_temperate_moist:   {HAC: 88, LAC: 63,  sandy: 34, spodic: null, volcanic: 80}
+    tropical_dry:           {HAC: 38, LAC: 35,  sandy: 31, spodic: null, volcanic: 50}
+    tropical_moist:         {HAC: 65, LAC: 47,  sandy: 39, spodic: null, volcanic: 70}
+    tropical_wet:           {HAC: 44, LAC: 60,  sandy: 66, spodic: null, volcanic: 130}
+    tropical_montane:       {HAC: 88, LAC: 63,  sandy: 34, spodic: null, volcanic: 80}
+  cropland_f_LU:   # Table 5
+    long_term:  {temperate_boreal_dry: 0.80, temperate_boreal_moist: 0.69, tropical_dry: 0.58, tropical_moist_wet: 0.48, tropical_montane: 0.64}
+    short_term_or_set_aside: {temperate_boreal_tropical_dry: 0.93, temperate_boreal_tropical_moist_wet: 0.82, tropical_montane: 0.88}
+  cropland_f_MG:   # Table 5
+    full_tillage: {all: 1.00}
+    reduced_tillage: {temperate_boreal_dry: 1.02, temperate_boreal_moist: 1.08, tropical_dry: 1.09, tropical_moist_wet: 1.15, tropical_montane: 1.09}
+    no_till: null   # not tabulated, errata E-AR6-03
+  cropland_f_IN:   # Table 6
+    low: {temperate_boreal_dry: 0.95, temperate_boreal_moist: 0.92, tropical_dry: 0.95, tropical_moist_wet: 0.92, tropical_montane: 0.94}
+    medium: {all: 1.00}
+    high_without_manure: {temperate_boreal_tropical_dry: 1.04, temperate_boreal_tropical_moist_wet: 1.11, tropical_montane: 1.08}
+  grassland:       # Table 7
+    f_LU: {all: 1.00}
+    f_MG: {non_degraded: 1.00, moderately_degraded: {temperate_boreal: 0.95, tropical: 0.97, tropical_montane: 0.96}, severely_degraded: 0.70}
+    f_IN: {low_medium: 1.00, high: 1.11}
+  not_applicable_cropland:   # Table 2 (PDF p.7-8): [climate, land_use, management, input]
+    - [boreal, long_term, full_tillage, high_with_manure]
+    - [boreal, long_term, reduced_tillage, high_with_manure]
+    - [boreal, long_term, no_till, high_without_manure]
+    - [boreal, long_term, no_till, high_with_manure]
+    - [boreal, short_term, full_tillage, high_with_manure]
+    - [boreal, short_term, reduced_tillage, high_with_manure]
+    - [boreal, short_term, no_till, high_without_manure]
+    - [boreal, short_term, no_till, high_with_manure]
+    - [temperate_cold_dry, long_term, full_tillage, high_with_manure]
+    - [temperate_cold_dry, long_term, reduced_tillage, high_with_manure]
+    - [temperate_cold_dry, long_term, no_till, high_with_manure]
+    - [temperate_cold_dry, short_term, full_tillage, high_with_manure]
+    - [temperate_cold_dry, short_term, reduced_tillage, high_with_manure]
+    - [temperate_cold_dry, short_term, no_till, medium]
+    - [temperate_cold_dry, short_term, no_till, high_without_manure]
+    - [temperate_cold_moist, long_term, reduced_tillage, high_with_manure]
+    - [temperate_cold_moist, long_term, no_till, high_with_manure]
+    - [temperate_cold_moist, short_term, full_tillage, high_with_manure]
+    - [temperate_cold_moist, short_term, reduced_tillage, high_with_manure]
+    - [temperate_cold_moist, short_term, no_till, high_without_manure]
+    - [temperate_cold_moist, short_term, no_till, high_with_manure]
+    - [temperate_warm_dry, long_term, full_tillage, high_with_manure]
+    - [temperate_warm_dry, long_term, reduced_tillage, high_with_manure]
+    - [temperate_warm_dry, long_term, no_till, high_with_manure]
+    - [temperate_warm_dry, short_term, full_tillage, high_with_manure]
+    - [temperate_warm_dry, short_term, reduced_tillage, high_with_manure]
+    - [temperate_warm_dry, short_term, no_till, medium]
+    - [temperate_warm_dry, short_term, no_till, high_without_manure]
+    - [temperate_warm_moist, long_term, reduced_tillage, high_with_manure]
+    - [temperate_warm_moist, long_term, no_till, high_with_manure]
+    - [temperate_warm_moist, short_term, full_tillage, high_with_manure]
+    - [temperate_warm_moist, short_term, reduced_tillage, high_with_manure]
+    - [temperate_warm_moist, short_term, no_till, high_without_manure]
+    - [temperate_warm_moist, short_term, no_till, high_with_manure]
+    - [tropical_dry, short_term, full_tillage, high_with_manure]
+    - [tropical_dry, short_term, reduced_tillage, medium]
+    - [tropical_dry, short_term, reduced_tillage, high_without_manure]
+    - [tropical_dry, short_term, reduced_tillage, high_with_manure]
+    - [tropical_dry, short_term, no_till, ALL]
+    - [tropical_moist, short_term, full_tillage, high_with_manure]
+    - [tropical_moist, short_term, reduced_tillage, high_without_manure]
+    - [tropical_moist, short_term, reduced_tillage, high_with_manure]
+    - [tropical_moist, short_term, no_till, high_without_manure]
+    - [tropical_moist, short_term, no_till, high_with_manure]
+    - [tropical_montane, long_term, no_till, high_with_manure]
+    - [tropical_montane, short_term, full_tillage, high_with_manure]
+    - [tropical_montane, short_term, reduced_tillage, high_without_manure]
+    - [tropical_montane, short_term, reduced_tillage, high_with_manure]
+    - [tropical_montane, short_term, no_till, medium]
+    - [tropical_montane, short_term, no_till, high_without_manure]
+    - [tropical_montane, short_term, no_till, high_with_manure]
+    - [tropical_wet, short_term, full_tillage, high_with_manure]
+    - [tropical_wet, short_term, reduced_tillage, high_without_manure]
+    - [tropical_wet, short_term, reduced_tillage, high_with_manure]
+    - [tropical_wet, short_term, no_till, high_without_manure]
+    - [tropical_wet, short_term, no_till, high_with_manure]
+  not_applicable_grassland:  # Table 3 (PDF p.8): [climate, management, input]
+    - [boreal, improved, ALL]
+    - [boreal, non_degraded, ALL]
+    - [boreal, moderately_degraded, high]
+    - [temperate_cold_dry, improved, ALL]
+    - [temperate_cold_dry, non_degraded, ALL]
+    - [temperate_cold_dry, moderately_degraded, high]
+    - [temperate_cold_moist, improved, ALL]
+    - [temperate_cold_moist, non_degraded, ALL]
+    - [temperate_cold_moist, moderately_degraded, high]
+    - [temperate_warm_dry, improved, ALL]
+    - [temperate_warm_dry, non_degraded, ALL]
+    - [temperate_warm_dry, moderately_degraded, high]
+    - [temperate_warm_moist, improved, ALL]
+    - [temperate_warm_moist, non_degraded, ALL]
+    - [temperate_warm_moist, moderately_degraded, high]
+    - [tropical_dry, improved, ALL]
+    - [tropical_dry, non_degraded, ALL]
+    - [tropical_moist, improved, ALL]
+    - [tropical_moist, non_degraded, ALL]
+    - [tropical_moist, moderately_degraded, high]
+    - [tropical_montane, improved, ALL]
+    - [tropical_montane, non_degraded, ALL]
+    - [tropical_montane, moderately_degraded, high]
+    - [tropical_wet, improved, ALL]
+    - [tropical_wet, non_degraded, high]
+    - [tropical_wet, moderately_degraded, high]
+
+BM-T-011:
+  phi_default:
+    project_or_leakage: 1.0
+    baseline: {A: {humid_wet: 0.75, dry: 0.75}, B: {humid_wet: 0.85, dry: 0.80}}
+  OX: 0.1
+  F: 0.5
+  DOC_f_default: 0.5
+  MCF_default: {anaerobic_managed: 1.0, semi_aerobic_managed: 0.5, unmanaged_deep_ge_5m: 0.8, unmanaged_shallow_or_stockpile: 0.4}
+  stockpile_volume_to_area_min: 1.5
+  waste_density_t_m3: {min: 1.0, max: 1.2, source: "para 22 (Application A)"}
+  uncertainty_factors_pct:   # Table 3: [low, high]
+    a_W: [2, 10]
+    b_DOCj: [5, 10]
+    c_DOCf: [5, 15]
+    d_F: [0, 5]
+    e_MCF: [0, 50]
+    g_exp: [5, 20]
+  DOC_j_pct_wet:
+    wood: 43
+    paper_cardboard: 40
+    food: 15
+    textiles: 24
+    garden_park: 20
+    inert: 0
+    efb: 20
+    industrial_sludge: {default: 9, formula: "9 * ODM_pct / 35"}
+    domestic_sludge: {default: 5, formula: "5 * ODM_pct / 10"}
+  k_per_yr:   # Table DPT 7: [boreal_temperate_dry, boreal_temperate_wet, tropical_dry, tropical_wet]
+    paper_cardboard_textiles: [0.04, 0.06, 0.045, 0.07]
+    wood_straw:               [0.02, 0.03, 0.025, 0.035]
+    garden_park_nonfood:      [0.05, 0.10, 0.065, 0.17]
+    food_sewage_sludge:       [0.06, 0.185, 0.085, 0.40]
+    efb: "= garden_park_nonfood"
+    pulp_paper_sludge: 0.03
+  climate_class_rules:
+    boreal_temperate: "MAT <= 20 C"
+    tropical: "MAT > 20 C"
+    dry_wet_boreal_temperate: "MAP/PET < 1 dry; MAP/PET > 1 wet"
+    dry_wet_tropical: "MAP < 1000 mm dry; MAP > 1000 mm wet"
+    boundary_rule: "exact boundary values -> class giving lower emissions (E-T11-04)"
+  BMP_min_sample_g: 500
+  BMP_min_tests: 3
+  composition_samples_min: "3 every 3 months"
+
+SOC_model_guidelines_DRAFT:
+  safety_discount_pct: {A: 0, B: 10, C: 30, D: 50}
+  min_distance_cal_val_m: 30
+  cv_min_folds: 5
+  cv_recommended_folds: 10
+  cv_min_points_per_fold: 20
+  cv_min_points_total: 100
+  alpha: 0.10
+  verification_max_interval_years: 5
+  failure_remedy_days: 90
+
+SOC_activity_tools_DRAFT:
+  significance_threshold_pct: 5
+  missing_se_default_fraction: 0.50
+  missing_se_t_value: 3
+  baseline_cap_without_records_fraction_of_project: 0.50
+  EF_FE_as_printed_tCO2e_per_kgN: {value: 0.01, errata: E-SOCAT-01}
+  EF1_IPCC2019_aggregated_kgN2O_N_per_kgN: 0.01
+  N2O_N_to_N2O: 1.5714285714285714   # 44/28
+  zero_tillage_yield_drop_leakage_threshold_pct: 5
+  zero_tillage_sampling_depth_cm: 50
+  biostimulant_min_sampling_interval_years: 4
+  biostimulant_lca_max_age_years_at_start: 1
+  biostimulant_lca_refresh_years: 3
+  input_change_tolerance_pct: 5

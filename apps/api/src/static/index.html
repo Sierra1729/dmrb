@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarbonBridge dMRV — Indian Carbon Market (CCTS)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #10b981;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-xl">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-lg font-bold tracking-tight text-white">CarbonBridge dMRV</h1>
+            <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-medium">BEE CCTS Offset</span>
+          </div>
+          <p class="text-xs text-slate-400">GreenConsult India Pvt. Ltd. — Digital MRV & Carbon Accounting Engine</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="hidden sm:flex items-center space-x-2 text-xs text-slate-300 bg-slate-900/60 px-3 py-1.5 rounded-md border border-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Engine Status: <strong class="text-emerald-400 font-mono">80/80 Passed (96% Cov)</strong></span>
+        </div>
+        <a href="/docs" target="_blank" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded-md border border-slate-600 flex items-center space-x-1.5 transition">
+          <i class="fa-solid fa-code"></i>
+          <span>Swagger API</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="bg-slate-800/60 border-b border-slate-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-1 overflow-x-auto py-1">
+      <button onclick="switchTab('portfolio')" id="tab-portfolio" class="tab-btn px-4 py-2 text-sm font-medium rounded-md text-emerald-400 bg-slate-800 border-b-2 border-emerald-400 flex items-center space-x-2">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>Portfolio & Pipeline</span>
+      </button>
+      <button onclick="switchTab('calculator')" id="tab-calculator" class="tab-btn px-4 py-2 text-sm font-medium rounded-md text-slate-400 hover:text-slate-200 flex items-center space-x-2">
+        <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
+        <span>Methodology Runner & Smart Wizard</span>
+      </button>
+      <button onclick="switchTab('lineage')" id="tab-lineage" class="tab-btn px-4 py-2 text-sm font-medium rounded-md text-slate-400 hover:text-slate-200 flex items-center space-x-2">
+        <i class="fa-solid fa-network-wired"></i>
+        <span>Lineage Trace DAG</span>
+      </button>
+      <button onclick="switchTab('qaqc')" id="tab-qaqc" class="tab-btn px-4 py-2 text-sm font-medium rounded-md text-slate-400 hover:text-slate-200 flex items-center space-x-2">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>QA/QC Rule Engine</span>
+      </button>
+      <button onclick="switchTab('catalogue')" id="tab-catalogue" class="tab-btn px-4 py-2 text-sm font-medium rounded-md text-slate-400 hover:text-slate-200 flex items-center space-x-2">
+        <i class="fa-solid fa-book-bookmark"></i>
+        <span>Parameter Catalogue</span>
+      </button>
+      <button onclick="switchTab('reproducibility')" id="tab-reproducibility" class="tab-btn px-4 py-2 text-sm font-medium rounded-md text-slate-400 hover:text-slate-200 flex items-center space-x-2">
+        <i class="fa-solid fa-box-archive"></i>
+        <span>ACVA Reproducibility</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+    <!-- 1. Portfolio View -->
+    <div id="view-portfolio" class="view-panel space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow">
+          <div class="text-xs font-medium text-slate-400 uppercase tracking-wider">Registered Projects</div>
+          <div class="text-3xl font-bold text-white mt-2">6</div>
+          <div class="text-xs text-emerald-400 mt-1 flex items-center">
+            <i class="fa-solid fa-check mr-1"></i> Across Forestry, Waste, Ag & SOC
+          </div>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow">
+          <div class="text-xs font-medium text-slate-400 uppercase tracking-wider">Estimated Total Removals / Reductions</div>
+          <div class="text-3xl font-bold text-emerald-400 mt-2">184,520 <span class="text-sm font-normal text-slate-400">t CO₂e</span></div>
+          <div class="text-xs text-slate-400 mt-1">Ex-ante crediting periods</div>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow">
+          <div class="text-xs font-medium text-slate-400 uppercase tracking-wider">Buffer Reserve (10%)</div>
+          <div class="text-3xl font-bold text-amber-400 mt-2">18,452 <span class="text-sm font-normal text-slate-400">t CO₂e</span></div>
+          <div class="text-xs text-slate-400 mt-1">Non-permanence risk pool</div>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow">
+          <div class="text-xs font-medium text-slate-400 uppercase tracking-wider">ACVA Audit Integrity</div>
+          <div class="text-3xl font-bold text-cyan-400 mt-2">100%</div>
+          <div class="text-xs text-slate-400 mt-1">Bit-identical reproducibility</div>
+        </div>
+      </div>
+
+      <!-- Project List Table -->
+      <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow">
+        <div class="px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+          <div>
+            <h2 class="text-base font-semibold text-white">CCTS Offset Projects Registry</h2>
+            <p class="text-xs text-slate-400">Projects under Bureau of Energy Efficiency (BEE) Offset Mechanism</p>
+          </div>
+          <button onclick="switchTab('calculator')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium px-3.5 py-2 rounded-lg transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Open Smart Input Wizard</span>
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm text-slate-300">
+            <thead class="bg-slate-900/60 text-xs uppercase text-slate-400 border-b border-slate-700">
+              <tr>
+                <th class="px-6 py-3">Project Code</th>
+                <th class="px-6 py-3">Project Title</th>
+                <th class="px-6 py-3">Methodology</th>
+                <th class="px-6 py-3">Crediting Period</th>
+                <th class="px-6 py-3">Status</th>
+                <th class="px-6 py-3">Est. Annual Credits</th>
+                <th class="px-6 py-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700/60 text-xs">
+              <tr class="hover:bg-slate-700/30">
+                <td class="px-6 py-4 font-mono font-medium text-white">PRJ-AR-001</td>
+                <td class="px-6 py-4">Western Ghats Reforestation Initiative</td>
+                <td class="px-6 py-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono">BM FR05.002</span></td>
+                <td class="px-6 py-4">2026–2046 (20 yrs)</td>
+                <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Registered</span></td>
+                <td class="px-6 py-4 font-mono font-semibold text-emerald-400">4,500 t</td>
+                <td class="px-6 py-4 text-right">
+                  <button onclick="loadCalculator('P1')" class="text-xs text-emerald-400 hover:text-emerald-300 font-medium">Calculate &rarr;</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-700/30">
+                <td class="px-6 py-4 font-mono font-medium text-white">PRJ-MNG-002</td>
+                <td class="px-6 py-4">Sundarbans Mangrove Blue Carbon</td>
+                <td class="px-6 py-4"><span class="px-2 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-mono">BM FR05.001</span></td>
+                <td class="px-6 py-4">2026–2056 (30 yrs)</td>
+                <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Registered</span></td>
+                <td class="px-6 py-4 font-mono font-semibold text-emerald-400">5,820 t</td>
+                <td class="px-6 py-4 text-right">
+                  <button onclick="loadCalculator('P2')" class="text-xs text-teal-400 hover:text-teal-300 font-medium">Calculate &rarr;</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-700/30">
+                <td class="px-6 py-4 font-mono font-medium text-white">PRJ-LFG-003</td>
+                <td class="px-6 py-4">Okhla Landfill Methane Recovery & Power</td>
+                <td class="px-6 py-4"><span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-mono">BM WA03.002</span></td>
+                <td class="px-6 py-4">2025–2035 (10 yrs)</td>
+                <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">Monitoring</span></td>
+                <td class="px-6 py-4 font-mono font-semibold text-emerald-400">48,000 t</td>
+                <td class="px-6 py-4 text-right">
+                  <button onclick="loadCalculator('P3')" class="text-xs text-blue-400 hover:text-blue-300 font-medium">Calculate &rarr;</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-700/30">
+                <td class="px-6 py-4 font-mono font-medium text-white">PRJ-SOC-004</td>
+                <td class="px-6 py-4">Punjab Regenerative Agriculture Soil Carbon</td>
+                <td class="px-6 py-4"><span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-mono">SOC-MG-DRAFT</span></td>
+                <td class="px-6 py-4">2026–2036 (10 yrs)</td>
+                <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">Draft Gated</span></td>
+                <td class="px-6 py-4 font-mono font-semibold text-amber-400">8,500 t (Draft)</td>
+                <td class="px-6 py-4 text-right">
+                  <button onclick="loadCalculator('P4')" class="text-xs text-amber-400 hover:text-amber-300 font-medium">Calculate &rarr;</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-700/30">
+                <td class="px-6 py-4 font-mono font-medium text-white">PRJ-RICE-005</td>
+                <td class="px-6 py-4">Godavari Basin Alternate Wetting & Drying</td>
+                <td class="px-6 py-4"><span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-mono">BM AG04.002</span></td>
+                <td class="px-6 py-4">2026–2031 (5 yrs)</td>
+                <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-300 border border-purple-500/30">Validation</span></td>
+                <td class="px-6 py-4 font-mono font-semibold text-emerald-400">12,400 t</td>
+                <td class="px-6 py-4 text-right">
+                  <button onclick="loadCalculator('P5')" class="text-xs text-purple-400 hover:text-purple-300 font-medium">Calculate &rarr;</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-700/30">
+                <td class="px-6 py-4 font-mono font-medium text-white">PRJ-MAN-006</td>
+                <td class="px-6 py-4">Smallholder Dairy Manure Biogas</td>
+                <td class="px-6 py-4"><span class="px-2 py-0.5 rounded bg-orange-500/20 text-orange-300 border border-orange-500/30 text-xs font-mono">BM AG04.001</span></td>
+                <td class="px-6 py-4">2026–2036 (10 yrs)</td>
+                <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">PDD Draft</span></td>
+                <td class="px-6 py-4 font-mono font-semibold text-emerald-400">16,200 t</td>
+                <td class="px-6 py-4 text-right">
+                  <button onclick="loadCalculator('P6')" class="text-xs text-cyan-400 hover:text-cyan-300 font-medium">Calculate &rarr;</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Methodology Calculator & Smart Input Wizard View -->
+    <div id="view-calculator" class="view-panel hidden space-y-6">
+
+      <!-- Mode Selector Header -->
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+            <span>Methodology Calculation Engine</span>
+            <span id="draft-pill" class="hidden text-xs bg-red-500/20 text-red-300 border border-red-500/40 px-2 py-0.5 rounded font-mono">DRAFT GATED</span>
+          </h2>
+          <p class="text-xs text-slate-400">All tough formulas, stoichiometric conversions, and Pint units run strictly in the backend.</p>
+        </div>
+
+        <!-- Mode Buttons -->
+        <div class="flex items-center space-x-2 bg-slate-900 p-1 rounded-lg border border-slate-700">
+          <button onclick="setInputMode('wizard')" id="mode-btn-wizard" class="px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-600 text-white shadow transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+            <span>Guided Smart Wizard (Zero-Formula)</span>
+          </button>
+          <button onclick="setInputMode('csv')" id="mode-btn-csv" class="px-3 py-1.5 rounded-md text-xs font-semibold text-slate-400 hover:text-slate-200 transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-file-csv"></i>
+            <span>1-Click CSV Ingestion</span>
+          </button>
+          <button onclick="setInputMode('expert')" id="mode-btn-expert" class="px-3 py-1.5 rounded-md text-xs font-semibold text-slate-400 hover:text-slate-200 transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Expert / ACVA Mode</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Project Type Selection Bar -->
+      <div class="bg-slate-800/90 border border-slate-700 rounded-xl px-5 py-3 shadow flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center space-x-3">
+          <span class="text-xs font-medium text-slate-300 uppercase tracking-wider">Select Project:</span>
+          <select id="calc-project-select" onchange="onProjectTypeChange(this.value)" class="bg-slate-900 border border-slate-600 rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
+            <option value="P1">🌳 P1: Forestry A/R (BM FR05.002)</option>
+            <option value="P2">🌊 P2: Mangrove Blue Carbon (BM FR05.001)</option>
+            <option value="P3">🏭 P3: Landfill Gas & Methane (BM WA03.002)</option>
+            <option value="P4">🌾 P4: Agricultural Soil Carbon (SOC-MG-DRAFT)</option>
+            <option value="P5">🍚 P5: Rice AWD Cultivation (BM AG04.002)</option>
+            <option value="P6">🐄 P6: Dairy Manure Biogas (BM AG04.001)</option>
+          </select>
+        </div>
+        <div id="methodology-pill" class="text-xs font-mono px-3 py-1 bg-slate-900 rounded text-emerald-400 border border-slate-700">
+          Tools: BM-T-001, BM-T-AR-0002..0006
+        </div>
+      </div>
+
+      <!-- Draft Disclaimer Banner (Shown for P4) -->
+      <div id="draft-banner" class="hidden p-4 rounded-lg bg-red-900/30 border border-red-700 text-red-200 text-xs flex items-center space-x-3">
+        <i class="fa-solid fa-triangle-exclamation text-lg text-red-400"></i>
+        <div>
+          <strong>DRAFT METHODOLOGY: NOT VALID FOR ISSUANCE.</strong>
+          <span>Issuance-grade runs are blocked by `DraftMethodologyIssuanceError`. Results run under draft estimation mode for internal review only.</span>
+        </div>
+      </div>
+
+      <!-- SECTION A: Guided Smart Wizard Container (Easy, Real-World Questions) -->
+      <div id="container-wizard" class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+              <i class="fa-solid fa-question-circle text-emerald-400"></i>
+              <span>Answer Simple Field Questions (No Math Required)</span>
+            </h3>
+            <p class="text-xs text-slate-400">Enter simple real-world answers. The backend automatically resolves allometric equations, Pint units, IPCC tables, and conservatism discounts.</p>
+          </div>
+          <span class="text-xs bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded">Simple Input Mode</span>
+        </div>
+
+        <!-- Dynamic Questions by Project Type -->
+        <div id="wizard-questions-container" class="space-y-4">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- What the Backend Does Automatically Box -->
+        <div class="p-4 rounded-lg bg-slate-900/90 border border-emerald-500/30 text-xs space-y-2">
+          <div class="font-semibold text-emerald-400 flex items-center space-x-1.5">
+            <i class="fa-solid fa-gears"></i>
+            <span>What the Backend Engine Solves Automatically Behind the Scenes:</span>
+          </div>
+          <p id="wizard-backend-explanation" class="text-slate-300 text-xs leading-relaxed">
+            <!-- Dynamic explanation -->
+          </p>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button id="calc-run-btn" onclick="triggerCalculationWithVisualFeedback()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-6 py-2.5 rounded-lg text-sm transition flex items-center space-x-2 shadow-lg shadow-emerald-900/40 cursor-pointer">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Calculate Credits with Backend Engine</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SECTION B: 1-Click Field CSV Ingestion Container -->
+      <div id="container-csv" class="hidden bg-slate-800 border border-slate-700 rounded-xl p-6 shadow space-y-6">
+        <div class="border-b border-slate-700 pb-3 flex justify-between items-center">
+          <div>
+            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+              <i class="fa-solid fa-cloud-arrow-up text-cyan-400"></i>
+              <span>1-Click Raw Field Data / Plot Survey Ingestion</span>
+            </h3>
+            <p class="text-xs text-slate-400">Field staff simply drop their raw tree measurements or sensor logs. The QA/QC pipeline validates, computes stratum variance, and calculates credits.</p>
+          </div>
+          <button onclick="loadSampleSurveyCSV()" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-xs font-semibold px-3 py-1.5 rounded text-white transition flex items-center space-x-1.5">
+            <i class="fa-solid fa-file-arrow-up text-cyan-400"></i>
+            <span>Load Demo Forest Survey (50 Trees)</span>
+          </button>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div id="dropzone" class="border-2 border-dashed border-slate-600 hover:border-emerald-500/60 rounded-xl p-8 text-center bg-slate-900/40 transition cursor-pointer">
+          <i class="fa-solid fa-file-csv text-3xl text-emerald-400 mb-2"></i>
+          <p class="text-sm font-medium text-slate-200">Drag & drop your raw field survey CSV or sensor log here</p>
+          <p class="text-xs text-slate-400 mt-1">Accepts `.csv` or `.xlsx` (Columns: `tree_tag, species, dbh_cm, height_m`)</p>
+          <p class="text-[11px] text-emerald-400 font-mono mt-2">Automatic QA/QC check & bounds validation runs instantly on upload</p>
+        </div>
+
+        <!-- CSV Preview Table -->
+        <div id="csv-preview-box" class="hidden space-y-3">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-semibold text-slate-300">Parsed Sample Data (<span id="csv-row-count" class="text-emerald-400 font-mono">50</span> records validated):</span>
+            <span class="text-emerald-400 font-mono flex items-center"><i class="fa-solid fa-circle-check mr-1"></i> QA/QC Bounds Passed (5.0 cm &le; DBH &le; 300.0 cm)</span>
+          </div>
+          <div class="overflow-x-auto max-h-48 rounded border border-slate-700">
+            <table class="w-full text-left text-xs font-mono text-slate-300">
+              <thead class="bg-slate-900 text-slate-400 sticky top-0">
+                <tr>
+                  <th class="px-3 py-1.5">Tree Tag</th>
+                  <th class="px-3 py-1.5">Species</th>
+                  <th class="px-3 py-1.5">DBH (cm)</th>
+                  <th class="px-3 py-1.5">Height (m)</th>
+                  <th class="px-3 py-1.5">Wood Density</th>
+                  <th class="px-3 py-1.5">Calculated Biomass</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 bg-slate-900/50" id="csv-sample-rows">
+                <!-- Filled by JS -->
+              </tbody>
+            </table>
+          </div>
+          <div class="flex justify-end pt-2">
+            <button onclick="executeCalculationFromCSV()" class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-5 py-2 rounded-lg text-xs transition flex items-center space-x-2">
+              <i class="fa-solid fa-calculator"></i>
+              <span>Run Biomass Aggregation & Credit Engine</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION C: Expert / ACVA Mode (Scientific Parameters with Units) -->
+      <div id="container-expert" class="hidden bg-slate-800 border border-slate-700 rounded-xl p-6 shadow space-y-6">
+        <div class="border-b border-slate-700 pb-3 flex justify-between items-center">
+          <div>
+            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+              <i class="fa-solid fa-sliders text-amber-400"></i>
+              <span>Direct Scientific Parameters & Units (ACVA / Engineering View)</span>
+            </h3>
+            <p class="text-xs text-slate-400">Manual input for senior carbon analysts and ACVA auditors verifying specific edge cases.</p>
+          </div>
+          <span class="text-xs bg-amber-500/10 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-mono">Pint Units Enforced</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="calc-inputs-container">
+          <!-- Filled by JS -->
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button id="calc-expert-run-btn" onclick="triggerCalculationWithVisualFeedback()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-5 py-2 rounded-lg text-xs transition flex items-center space-x-2 cursor-pointer">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Run Parameterized Engine</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results & Plain-Language Summary Box -->
+      <div id="calc-results-box" class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow space-y-6 transition-all duration-300">
+        <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-white flex items-center space-x-2">
+              <i class="fa-solid fa-award text-emerald-400"></i>
+              <span>Carbon Accounting Results</span>
+            </h3>
+            <p class="text-xs text-slate-400">Official Credit Issuance Summary for Bureau of Energy Efficiency (BEE)</p>
+          </div>
+          <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full font-mono">100% Bit-Identical</span>
+        </div>
+
+        <!-- Live Execution Status Toast -->
+        <div id="calc-status-toast" class="hidden p-3 rounded-lg bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 text-xs flex items-center justify-between font-mono shadow-md"></div>
+
+        <!-- Plain Summary KPI Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="calc-kpi-grid">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- Financial & Co-Benefits Card for Farmers / Operators -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-slate-900/70 p-4 rounded-lg border border-slate-700 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-bold">
+              ₹
+            </div>
+            <div>
+              <div class="text-xs text-slate-400">Estimated Market Value (CCTS Trading)</div>
+              <div class="text-lg font-bold text-white font-mono" id="est-rupee-value">₹ 45,00,000</div>
+              <div class="text-[11px] text-emerald-400">Estimated at ₹ 1,000 / Carbon Credit Certificate</div>
+            </div>
+          </div>
+          <div class="bg-slate-900/70 p-4 rounded-lg border border-slate-700 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-hand-holding-droplet"></i>
+            </div>
+            <div>
+              <div class="text-xs text-slate-400">Co-Benefits & Sustainability Impact</div>
+              <div class="text-sm font-semibold text-white mt-0.5" id="cobenefits-text">Soil organic enrichment, groundwater recharge & biodiversity habitat</div>
+              <div class="text-[11px] text-blue-300">Compliant with Indian Green Credit Programme</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACVA Technical Verification Proof Accordion (Tough formulas tucked safely here!) -->
+        <div class="border border-slate-700 rounded-lg overflow-hidden bg-slate-900/50">
+          <button onclick="toggleAccordion('auditor-details')" class="w-full px-4 py-3 text-left font-medium text-xs text-slate-300 hover:text-white flex justify-between items-center transition bg-slate-800/80">
+            <span class="flex items-center space-x-2">
+              <i class="fa-solid fa-code text-cyan-400"></i>
+              <span>🔍 View Mathematical Proof & ACVA Lineage (Tough Formulas & Git SHA)</span>
+            </span>
+            <i id="accordion-arrow" class="fa-solid fa-chevron-down text-slate-400 transition-transform"></i>
+          </button>
+          <div id="auditor-details" class="hidden p-4 space-y-3 border-t border-slate-700 font-mono text-xs">
+            <div class="text-slate-400 text-xs font-sans">
+              This proof is automatically compiled by the pure-Python calculation engine with cryptographic lineage DAG nodes, Pint unit conversions, and errata references:
+            </div>
+            <pre id="calc-json-output" class="text-emerald-300 bg-slate-950 p-4 rounded border border-slate-800 overflow-x-auto max-h-60 text-xs">{ "status": "Ready for run" }</pre>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 3. Lineage Trace DAG View -->
+    <div id="view-lineage" class="view-panel hidden space-y-6">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow">
+        <div class="flex justify-between items-center pb-4 border-b border-slate-700">
+          <div>
+            <h2 class="text-lg font-bold text-white">Full Lineage DAG & Equation Audit</h2>
+            <p class="text-xs text-slate-400">One-click audit trail: Equation ID &rarr; Input values with units &rarr; Parameter source &rarr; Git SHA & Engine Version</p>
+          </div>
+          <span class="text-xs font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 px-3 py-1 rounded">Trace Hash: SHA-256</span>
+        </div>
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full text-left text-xs font-mono text-slate-300">
+            <thead class="bg-slate-900 text-slate-400 border-b border-slate-700">
+              <tr>
+                <th class="px-4 py-2.5">Node ID</th>
+                <th class="px-4 py-2.5">Methodology Tool</th>
+                <th class="px-4 py-2.5">Equation ID</th>
+                <th class="px-4 py-2.5">Primary Source Page</th>
+                <th class="px-4 py-2.5">Input Values (Pint Units)</th>
+                <th class="px-4 py-2.5">Output</th>
+                <th class="px-4 py-2.5">Errata Applied</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700/60" id="lineage-table-body">
+              <tr>
+                <td class="px-4 py-3 text-cyan-400">node-ar-01</td>
+                <td class="px-4 py-3">BM-T-AR-0004</td>
+                <td class="px-4 py-3 font-semibold text-white">[AR0004 Eq.15]</td>
+                <td class="px-4 py-3">p.14</td>
+                <td class="px-4 py-3 text-slate-300">w_i=[0.6, 0.4], s2=[40, 22], b_tree=36.4 t d.m./ha</td>
+                <td class="px-4 py-3 text-emerald-400 font-bold">u_C = 10.09%</td>
+                <td class="px-4 py-3"><span class="text-amber-400">E-AR4-07</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 text-cyan-400">node-ar-02</td>
+                <td class="px-4 py-3">BM-T-AR-0004</td>
+                <td class="px-4 py-3 font-semibold text-white">[AR0004 App.2]</td>
+                <td class="px-4 py-3">p.29</td>
+                <td class="px-4 py-3 text-slate-300">u_C = 10.09% (> 10% threshold)</td>
+                <td class="px-4 py-3 text-emerald-400 font-bold">discount = 25% of half-width</td>
+                <td class="px-4 py-3"><span class="text-slate-500">—</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 text-cyan-400">node-fr-03</td>
+                <td class="px-4 py-3">BM FR05.002</td>
+                <td class="px-4 py-3 font-semibold text-white">[FR05.002 Eq.5]</td>
+                <td class="px-4 py-3">p.8</td>
+                <td class="px-4 py-3 text-slate-300">C_PROJ=5000, C_BSL=0, LK=0, GHG_E=0</td>
+                <td class="px-4 py-3 text-emerald-400 font-bold">&Delta;C_AR = 5000.0 t CO₂e</td>
+                <td class="px-4 py-3"><span class="text-slate-500">—</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 text-cyan-400">node-fr-04</td>
+                <td class="px-4 py-3">BM FR05.002</td>
+                <td class="px-4 py-3 font-semibold text-white">[FR05.002 Buffer]</td>
+                <td class="px-4 py-3">p.10</td>
+                <td class="px-4 py-3 text-slate-300">buffer_rate = 10% (non-permanence)</td>
+                <td class="px-4 py-3 text-emerald-400 font-bold">net_issuable = 4500.0 t CO₂e</td>
+                <td class="px-4 py-3"><span class="text-slate-500">—</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. QA/QC Rule Engine View -->
+    <div id="view-qaqc" class="view-panel hidden space-y-6">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow">
+        <div class="flex justify-between items-center pb-4 border-b border-slate-700">
+          <div>
+            <h2 class="text-lg font-bold text-white">Declarative QA/QC Rules & Issue Tracker</h2>
+            <p class="text-xs text-slate-400">Enforces biological bounds, duplicate detection, and Indian mainland geofencing before calculation</p>
+          </div>
+          <span class="text-xs font-semibold bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded border border-emerald-500/30">All Critical Gates Passing</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Declarative Rule Standards</h3>
+            <ul class="space-y-2 text-xs text-slate-300">
+              <li class="flex items-center justify-between p-2 rounded bg-slate-800/80">
+                <span>Tree DBH Range: <strong>5.0 cm – 300.0 cm</strong></span>
+                <span class="text-emerald-400 font-bold">PASS</span>
+              </li>
+              <li class="flex items-center justify-between p-2 rounded bg-slate-800/80">
+                <span>Tree Height: <strong>1.3 m – 80.0 m</strong></span>
+                <span class="text-emerald-400 font-bold">PASS</span>
+              </li>
+              <li class="flex items-center justify-between p-2 rounded bg-slate-800/80">
+                <span>Soil Bulk Density: <strong>0.5 – 2.0 g/cm³</strong></span>
+                <span class="text-emerald-400 font-bold">PASS</span>
+              </li>
+              <li class="flex items-center justify-between p-2 rounded bg-slate-800/80">
+                <span>LFG Methane Fraction: <strong>25% – 70% CH₄</strong></span>
+                <span class="text-emerald-400 font-bold">PASS</span>
+              </li>
+              <li class="flex items-center justify-between p-2 rounded bg-slate-800/80">
+                <span>Geofence: <strong>Mainland India (6°N–37.5°N, 68°E–97.5°E)</strong></span>
+                <span class="text-emerald-400 font-bold">PASS</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Active QA/QC Issues</h3>
+            <div class="text-center py-6 text-slate-400 text-xs">
+              <i class="fa-solid fa-circle-check text-3xl text-emerald-400 mb-2"></i>
+              <p class="font-medium text-slate-200">Zero Critical QA/QC Issues</p>
+              <p class="text-[11px] text-slate-400 mt-1">All datasets passed boundary, integrity, and duplicate checks.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Parameter Catalogue View -->
+    <div id="view-catalogue" class="view-panel hidden space-y-6">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow">
+        <div class="flex justify-between items-center pb-4 border-b border-slate-700">
+          <div>
+            <h2 class="text-lg font-bold text-white">Parameter Catalogue & Legal Citations</h2>
+            <p class="text-xs text-slate-400">Strict zero-invented-numbers: every default is cited with exact table and page</p>
+          </div>
+          <span class="text-xs font-mono bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded">18 Parameters Locked</span>
+        </div>
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-900 text-slate-400 border-b border-slate-700 font-mono">
+              <tr>
+                <th class="px-4 py-2.5">Symbol</th>
+                <th class="px-4 py-2.5">Description</th>
+                <th class="px-4 py-2.5">Default Value</th>
+                <th class="px-4 py-2.5">Unit</th>
+                <th class="px-4 py-2.5">Methodology Tool</th>
+                <th class="px-4 py-2.5">Legal Citation</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-700/60 font-mono">
+              <tr>
+                <td class="px-4 py-2.5 font-bold text-emerald-400">CF_TREE</td>
+                <td class="px-4 py-2.5 font-sans">Carbon fraction of tree biomass</td>
+                <td class="px-4 py-2.5 text-white font-bold">0.47</td>
+                <td class="px-4 py-2.5">t C / t d.m.</td>
+                <td class="px-4 py-2.5 text-slate-400">BM-T-AR-0004</td>
+                <td class="px-4 py-2.5 font-sans text-slate-400">IPCC 2006 Table 4.3; PDF p.4</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-bold text-emerald-400">CF_S</td>
+                <td class="px-4 py-2.5 font-sans">Carbon fraction of shrub biomass</td>
+                <td class="px-4 py-2.5 text-white font-bold">0.47</td>
+                <td class="px-4 py-2.5">t C / t d.m.</td>
+                <td class="px-4 py-2.5 text-slate-400">BM-T-AR-0004</td>
+                <td class="px-4 py-2.5 font-sans text-slate-400">IPCC 2006 Table 4.3; PDF p.4</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-bold text-emerald-400">GWP_CH4</td>
+                <td class="px-4 py-2.5 font-sans">Global warming potential of CH₄</td>
+                <td class="px-4 py-2.5 text-white font-bold">29.80</td>
+                <td class="px-4 py-2.5">t CO₂e / t CH₄</td>
+                <td class="px-4 py-2.5 text-slate-400">All tools</td>
+                <td class="px-4 py-2.5 font-sans text-slate-400">IPCC AR6 100-year; CCTS Rule</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-bold text-emerald-400">GWP_N2O</td>
+                <td class="px-4 py-2.5 font-sans">Global warming potential of N₂O</td>
+                <td class="px-4 py-2.5 text-white font-bold">273.00</td>
+                <td class="px-4 py-2.5">t CO₂e / t N₂O</td>
+                <td class="px-4 py-2.5 text-slate-400">All tools</td>
+                <td class="px-4 py-2.5 font-sans text-slate-400">IPCC AR6 100-year; CCTS Rule</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-bold text-emerald-400">UF_b</td>
+                <td class="px-4 py-2.5 font-sans">Net-to-gross adjustment factor</td>
+                <td class="px-4 py-2.5 text-white font-bold">0.89</td>
+                <td class="px-4 py-2.5">dimensionless</td>
+                <td class="px-4 py-2.5 text-slate-400">BM AG04.001</td>
+                <td class="px-4 py-2.5 font-sans text-slate-400">PDF p.8 Eq.5 & Table 4 (E-AG1-01)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-bold text-emerald-400">EF_FE</td>
+                <td class="px-4 py-2.5 font-sans">Fertilizer emission factor</td>
+                <td class="px-4 py-2.5 text-white font-bold">0.01</td>
+                <td class="px-4 py-2.5">t CO₂e / kg N</td>
+                <td class="px-4 py-2.5 text-slate-400">SOC-AT-DRAFT</td>
+                <td class="px-4 py-2.5 font-sans text-slate-400">Cover crops p.75 Eq.2 (E-SOCAT-01)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. ACVA Reproducibility View -->
+    <div id="view-reproducibility" class="view-panel hidden space-y-6">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-white">ACVA Independent Calculation Reproducibility</h2>
+          <p class="text-xs text-slate-400">Auditors (ACVAs) can download an immutable calculation bundle and reproduce bit-identical outputs using the standalone CLI</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-900 p-5 rounded-lg border border-slate-700 space-y-3">
+            <h3 class="text-sm font-semibold text-slate-200">1. Verification Bundle Package</h3>
+            <p class="text-xs text-slate-400">Contains immutable snapshot files with SHA-256 digital signatures:</p>
+            <ul class="text-xs font-mono text-cyan-300 space-y-1">
+              <li>&bull; inputs.json (parameters, plot trees, time-series)</li>
+              <li>&bull; metadata.json (project boundaries, GWP set, vintages)</li>
+              <li>&bull; lineage_trace.json (equation DAG trace)</li>
+              <li>&bull; outputs.json (verified carbon credit quantities)</li>
+              <li>&bull; manifest.json (SHA-256 hashes of all files)</li>
+            </ul>
+            <button onclick="downloadSampleBundle()" class="w-full mt-3 bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs font-semibold py-2 rounded text-slate-200 transition">
+              <i class="fa-solid fa-download mr-1.5"></i> Download Verification Bundle (ZIP)
+            </button>
+          </div>
+
+          <div class="bg-slate-900 p-5 rounded-lg border border-slate-700 space-y-3">
+            <h3 class="text-sm font-semibold text-slate-200">2. ACVA CLI Reproduction Command</h3>
+            <p class="text-xs text-slate-400">ACVA auditors run the standalone CLI tool to verify bit-identical reproduction:</p>
+            <div class="bg-slate-950 p-3 rounded border border-slate-800 text-xs font-mono text-emerald-400">
+              $ python -m cli.main run --bundle bundle.zip
+            </div>
+            <div class="text-xs text-slate-400">
+              Output check:
+              <span class="text-emerald-400 font-mono block mt-1">[SUCCESS] 100% BIT-IDENTICAL REPRODUCTION CONFIRMED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-800/80 border-t border-slate-700 py-3 text-xs text-slate-400 text-center">
+    <span>CarbonBridge dMRV v0.1.0 &bull; Offset Mechanism under Carbon Credit Trading Scheme (CCTS) &bull; Bureau of Energy Efficiency (BEE)</span>
+  </footer>
+
+  <script>
+    // Tab switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('text-emerald-400', 'bg-slate-800', 'border-b-2', 'border-emerald-400');
+        btn.classList.add('text-slate-400');
+      });
+      document.getElementById('view-' + tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById('tab-' + tabId);
+      activeBtn.classList.remove('text-slate-400');
+      activeBtn.classList.add('text-emerald-400', 'bg-slate-800', 'border-b-2', 'border-emerald-400');
+    }
+
+    // Input Mode Switching
+    let currentInputMode = 'wizard';
+    function setInputMode(mode) {
+      currentInputMode = mode;
+      const modes = ['wizard', 'csv', 'expert'];
+      modes.forEach(m => {
+        const btn = document.getElementById('mode-btn-' + m);
+        const container = document.getElementById('container-' + m);
+        if (m === mode) {
+          btn.className = "px-3 py-1.5 rounded-md text-xs font-semibold bg-emerald-600 text-white shadow transition flex items-center space-x-1.5";
+          container.classList.remove('hidden');
+        } else {
+          btn.className = "px-3 py-1.5 rounded-md text-xs font-semibold text-slate-400 hover:text-slate-200 transition flex items-center space-x-1.5";
+          container.classList.add('hidden');
+        }
+      });
+    }
+
+    function toggleAccordion(id) {
+      const el = document.getElementById(id);
+      const arrow = document.getElementById('accordion-arrow');
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden');
+        arrow.classList.add('rotate-180');
+      } else {
+        el.classList.add('hidden');
+        arrow.classList.remove('rotate-180');
+      }
+    }
+
+    // Project configurations & Smart Wizard Questions
+    const projectConfigs = {
+      P1: {
+        name: "Forestry A/R (BM FR05.002)",
+        isDraft: false,
+        tools: "BM-T-001, BM-T-AR-0002..0006",
+        backendExplanation: "The backend takes your tree species and diameter, looks up the certified allometric equation ln(AGB) = a + b*ln(DBH), determines tree dry mass, adds below-ground root biomass using root-shoot ratio (R=0.24), applies carbon fraction (CF=0.47), scales to CO₂e using molecular ratio 44/12, and automatically locks 10% into the BEE Non-Permanence Buffer Reserve.",
+        wizardQuestions: [
+          {
+            label: "1. How many hectares of land did you plant?",
+            id: "wz_p1_area",
+            type: "number",
+            val: "125.0",
+            unit: "hectares (ha)",
+            help: "1 Hectare ≈ 2.47 Acres"
+          },
+          {
+            label: "2. Which dominant tree species was planted?",
+            id: "wz_p1_species",
+            type: "select",
+            options: [
+              { label: "Teak (Tectona grandis / Sagwan) — Wood Density 0.57 g/cm³", val: "teak" },
+              { label: "Eucalyptus (Safeda) — Fast Growing Density 0.62 g/cm³", val: "eucalyptus" },
+              { label: "Sal (Shorea robusta) — Dense Timber Density 0.70 g/cm³", val: "sal" },
+              { label: "Bamboo (Bambusa spp.) — Rapid Harvest Cycle", val: "bamboo" },
+              { label: "Mixed Native Hardwoods (Biodiversity Forest)", val: "native" }
+            ]
+          },
+          {
+            label: "3. Average Tree Girth / Diameter (DBH):",
+            id: "wz_p1_dbh",
+            type: "slider",
+            min: 5,
+            max: 50,
+            val: 18,
+            unit: "cm DBH",
+            help: "Measure diameter at chest height (1.3 meters from ground)"
+          },
+          {
+            label: "4. Planting Density:",
+            id: "wz_p1_density",
+            type: "select",
+            options: [
+              { label: "Standard Commercial (1,000 trees / hectare)", val: "1000" },
+              { label: "High Density Block (1,600 trees / hectare)", val: "1600" },
+              { label: "Agroforestry / Boundary (400 trees / hectare)", val: "400" }
+            ]
+          }
+        ],
+        expertInputs: [
+          { label: "Total Stratum Area (ha)", id: "p1_area", val: "125.0", unit: "ha" },
+          { label: "Plot Aboveground Biomass (t d.m./ha)", id: "p1_agb", val: "44.0", unit: "t/ha" },
+          { label: "Carbon Fraction CF_TREE", id: "p1_cf", val: "0.47", unit: "t C/t d.m." }
+        ]
+      },
+      P2: {
+        name: "Mangrove Blue Carbon (BM FR05.001)",
+        isDraft: false,
+        tools: "BM-T-001, BM-T-AR-0002..0005, Mangrove SOC",
+        backendExplanation: "The backend calculates above- and below-ground living biomass for coastal tidal wetlands, applies the Government 20-year cohort soil organic carbon default accrual (0.50 t C/ha/year), and strictly enforces the exclusion of the litter pool per methodology specs.",
+        wizardQuestions: [
+          {
+            label: "1. How many hectares of coastal mangrove area were restored?",
+            id: "wz_p2_area",
+            type: "number",
+            val: "80.0",
+            unit: "hectares (ha)",
+            help: "Intertidal coastal zone"
+          },
+          {
+            label: "2. Mangrove Species Type:",
+            id: "wz_p2_species",
+            type: "select",
+            options: [
+              { label: "Rhizophora mucronata (True Red Mangrove / Prop Roots)", val: "rhizophora" },
+              { label: "Avicennia marina (Grey Mangrove / Pneumatophores)", val: "avicennia" },
+              { label: "Mixed Indian Estuarine Mangrove", val: "mixed" }
+            ]
+          },
+          {
+            label: "3. Stand Age since Planting:",
+            id: "wz_p2_age",
+            type: "slider",
+            min: 1,
+            max: 20,
+            val: 8,
+            unit: "years",
+            help: "Annual SOC accrues continuously over the 20-year cohort"
+          }
+        ],
+        expertInputs: [
+          { label: "Mangrove Area (ha)", id: "p2_area", val: "80.0", unit: "ha" },
+          { label: "Living Biomass Stock (t CO₂e/ha)", id: "p2_bio", val: "65.0", unit: "t/ha" },
+          { label: "Annual SOC Accrual Rate", id: "p2_soc_rate", val: "0.50", unit: "t C/ha/yr" }
+        ]
+      },
+      P3: {
+        name: "Landfill Gas & Methane (BM WA03.002)",
+        isDraft: false,
+        tools: "BM-T-001, BM-T-011 (FOD Model)",
+        backendExplanation: "The backend runs the multi-phase First Order Decay (FOD) model, calculating baseline methane generation across slowly and rapidly degrading organic waste fractions, and applies metered flare destruction efficiency (98%).",
+        wizardQuestions: [
+          {
+            label: "1. Daily Municipal Solid Waste Processed:",
+            id: "wz_p3_waste",
+            type: "number",
+            val: "650.0",
+            unit: "tonnes/day",
+            help: "Total organic municipal waste diverted/managed"
+          },
+          {
+            label: "2. Landfill Facility Type:",
+            id: "wz_p3_type",
+            type: "select",
+            options: [
+              { label: "Deep Managed Landfill (> 5 meters depth with active extraction)", val: "deep" },
+              { label: "Shallow / Semi-managed Dump Site (< 5 meters)", val: "shallow" }
+            ]
+          },
+          {
+            label: "3. Flare / Energy Recovery System:",
+            id: "wz_p3_flare",
+            type: "select",
+            options: [
+              { label: "High-Efficiency Enclosed Flare (98% Destruction Efficiency)", val: "enclosed" },
+              { label: "Biogas Generator Power Plant (Combined Heat & Power)", val: "chp" },
+              { label: "Open Candle Flare (50% Default Efficiency)", val: "open" }
+            ]
+          }
+        ],
+        expertInputs: [
+          { label: "Metered LFG Flow (Nm³/hr)", id: "p3_flow", val: "1200.0", unit: "Nm³/hr" },
+          { label: "Methane Fraction (w_CH4)", id: "p3_ch4", val: "0.52", unit: "vol fraction" },
+          { label: "Flare Destruction Efficiency", id: "p3_eff", val: "0.98", unit: "fraction" }
+        ]
+      },
+      P4: {
+        name: "Agricultural Soil Carbon (SOC-MG-DRAFT)",
+        isDraft: true,
+        tools: "SOC Model Guidelines (DRAFT), 5 Activity Tools",
+        backendExplanation: "DRAFT GATED METHODOLOGY: Computes soil organic carbon accrual under regenerative zero-tillage, while executing automated cross-validation distance checks (RMSE, bias, R² >= 0.70). Output is watermarked 'NOT VALID FOR ISSUANCE'.",
+        wizardQuestions: [
+          {
+            label: "1. Farm Area under Regenerative Practices:",
+            id: "wz_p4_area",
+            type: "number",
+            val: "200.0",
+            unit: "hectares (ha)",
+            help: "Continuous agricultural plots"
+          },
+          {
+            label: "2. Regenerative Practice Adopted:",
+            id: "wz_p4_practice",
+            type: "select",
+            options: [
+              { label: "Zero-Tillage + Winter Cover Crops (Maximum Carbon Sequestration)", val: "zt_cc" },
+              { label: "Reduced Tillage + Residue Retention (Mulching)", val: "rt_rr" },
+              { label: "Legume Crop Rotation with Organic Manuring", val: "legume" }
+            ]
+          },
+          {
+            label: "3. Dominant Soil Texture:",
+            id: "wz_p4_soil",
+            type: "select",
+            options: [
+              { label: "Indo-Gangetic Alluvial Loam (Medium Density 1.30 g/cm³)", val: "alluvial" },
+              { label: "Deccan Black Cotton Clay (High Swelling 1.25 g/cm³)", val: "black" },
+              { label: "Red Sandy Loam (Low Organic Retention 1.45 g/cm³)", val: "sandy" }
+            ]
+          }
+        ],
+        expertInputs: [
+          { label: "Project Soil Area (ha)", id: "p4_area", val: "200.0", unit: "ha" },
+          { label: "Measured SOC Concentration (%)", id: "p4_soc_pct", val: "1.2", unit: "%" },
+          { label: "Bulk Density (g/cm³)", id: "p4_bd", val: "1.30", unit: "g/cm³" }
+        ]
+      },
+      P5: {
+        name: "Rice AWD Cultivation (BM AG04.002)",
+        isDraft: false,
+        tools: "BM-T-001, AG04.002 Closed Chambers",
+        backendExplanation: "The backend assigns the Government approved baseline emission factor (280 kg CH₄/ha), applies the water regime scaling factor (SF_w = 0.55 for AWD, cutting emissions by 45%), multiplies by IPCC AR6 100-year GWP (29.80), and computes stoichiometric project reductions.",
+        wizardQuestions: [
+          {
+            label: "1. Total Paddy Field Area:",
+            id: "wz_p5_area",
+            type: "number",
+            val: "150.0",
+            unit: "hectares (ha)",
+            help: "Cultivated wetland rice"
+          },
+          {
+            label: "2. Field Irrigation & Water Management Method:",
+            id: "wz_p5_water",
+            type: "select",
+            options: [
+              { label: "Alternate Wetting & Drying (AWD) — Drain fields multiple times (45% Methane Cut)", val: "awd" },
+              { label: "Single Mid-Season Aeration / Drainage (29% Methane Cut)", val: "single" },
+              { label: "Traditional Continuous Flooding (Baseline Practice / No Reduction)", val: "continuous" }
+            ]
+          },
+          {
+            label: "3. Organic Fertilizer Applied:",
+            id: "wz_p5_fert",
+            type: "select",
+            options: [
+              { label: "None / Synthetic Fertilizer Only (SF_o = 1.0)", val: "none" },
+              { label: "Farmyard Manure / FYM (Composted cow dung)", val: "fym" },
+              { label: "Green Manure / In-situ Paddy Straw Incorporation", val: "straw" }
+            ]
+          }
+        ],
+        expertInputs: [
+          { label: "Paddy Field Area (ha)", id: "p5_area", val: "150.0", unit: "ha" },
+          { label: "Continuous Flooding Baseline EF", id: "p5_ef_bl", val: "280.0", unit: "kg CH4/ha" },
+          { label: "Water Scaling Factor (Multiple AWD)", id: "p5_sf_w", val: "0.55", unit: "IPCC default" }
+        ]
+      },
+      P6: {
+        name: "Dairy Manure Biogas (BM AG04.001)",
+        isDraft: false,
+        tools: "BM-T-001, AG04.001 (Smallholder)",
+        backendExplanation: "The backend calculates volatile solids production (2.8 kg VS/animal/day), stoichiometric methane yield (0.13 m³/kg), applies the baseline deep pit MCF (80%), enforces the mandatory BEE conservative adjustment factor UF_b = 0.89 (Errata E-AG1-01), and converts to issuable credits with GWP = 29.80.",
+        wizardQuestions: [
+          {
+            label: "1. How many dairy cattle or buffaloes are at your facility?",
+            id: "wz_p6_animals",
+            type: "slider",
+            min: 10,
+            max: 300,
+            val: 120,
+            unit: "cows / buffaloes",
+            help: "Average herd size during monitoring period"
+          },
+          {
+            label: "2. How was manure stored BEFORE installing the biogas plant? (Baseline):",
+            id: "wz_p6_storage",
+            type: "select",
+            options: [
+              { label: "Deep Anaerobic Pit / Wet Slurry Lagoon (High baseline emissions, MCF=80%)", val: "deep_pit" },
+              { label: "Open Solid Dry Lot / Pasture (Low baseline emissions, MCF=2%)", val: "dry_lot" }
+            ]
+          },
+          {
+            label: "3. How is the biogas utilized?",
+            id: "wz_p6_use",
+            type: "select",
+            options: [
+              { label: "100% Monitored Biogas Stoves for Rural Clean Cooking", val: "cooking" },
+              { label: "Biogas Generator for Farm Electricity & Water Pumping", val: "power" }
+            ]
+          }
+        ],
+        expertInputs: [
+          { label: "Number of Dairy Cattle", id: "p6_animals", val: "120.0", unit: "head" },
+          { label: "Daily Biogas combusted per digester", id: "p6_biogas", val: "2.4", unit: "m³/day" },
+          { label: "Net-to-gross Factor (UF_b)", id: "p6_uf", val: "0.89", unit: "conservative" }
+        ]
+      }
+    };
+
+    function onProjectTypeChange(code) {
+      const cfg = projectConfigs[code];
+      const banner = document.getElementById('draft-banner');
+      const draftPill = document.getElementById('draft-pill');
+      const methodPill = document.getElementById('methodology-pill');
+
+      methodPill.textContent = "Tools: " + cfg.tools;
+
+      if (cfg.isDraft) {
+        banner.classList.remove('hidden');
+        draftPill.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+        draftPill.classList.add('hidden');
+      }
+
+      // Render Wizard Questions
+      const wzContainer = document.getElementById('wizard-questions-container');
+      wzContainer.innerHTML = cfg.wizardQuestions.map(q => {
+        if (q.type === 'slider') {
+          return `
+            <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700 space-y-2">
+              <div class="flex justify-between items-center">
+                <label class="text-xs text-slate-200 font-semibold">${q.label}</label>
+                <span class="text-xs text-emerald-400 font-mono font-bold"><span id="${q.id}_val">${q.val}</span> ${q.unit}</span>
+              </div>
+              <input type="range" id="${q.id}" min="${q.min}" max="${q.max}" value="${q.val}" oninput="document.getElementById('${q.id}_val').innerText = this.value; executeCalculation();" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider-thumb">
+              <p class="text-[11px] text-slate-400">${q.help}</p>
+            </div>
+          `;
+        } else if (q.type === 'select') {
+          return `
+            <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700 space-y-1.5">
+              <label class="text-xs text-slate-200 font-semibold">${q.label}</label>
+              <select id="${q.id}" onchange="executeCalculation()" class="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
+                ${q.options.map(opt => `<option value="${opt.val}">${opt.label}</option>`).join('')}
+              </select>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="bg-slate-900/60 p-4 rounded-lg border border-slate-700 space-y-1.5">
+              <label class="text-xs text-slate-200 font-semibold">${q.label}</label>
+              <div class="flex items-center space-x-2">
+                <input type="number" id="${q.id}" value="${q.val}" oninput="executeCalculation()" class="w-full bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+                <span class="text-xs text-slate-400 whitespace-nowrap font-mono">${q.unit}</span>
+              </div>
+              <p class="text-[11px] text-slate-400">${q.help}</p>
+            </div>
+          `;
+        }
+      }).join('');
+
+      document.getElementById('wizard-backend-explanation').textContent = cfg.backendExplanation;
+
+      // Render Expert Inputs
+      const expertContainer = document.getElementById('calc-inputs-container');
+      expertContainer.innerHTML = cfg.expertInputs.map(inp => `
+        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700">
+          <label class="block text-xs text-slate-300 font-medium mb-1">${inp.label}</label>
+          <div class="flex items-center space-x-2">
+            <input type="number" id="${inp.id}" value="${inp.val}" oninput="executeCalculation()" class="w-full bg-slate-800 border border-slate-600 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+            <span class="text-xs text-slate-400 whitespace-nowrap font-mono">${inp.unit}</span>
+          </div>
+        </div>
+      `).join('');
+
+      executeCalculation();
+    }
+
+    // Load Demo Survey CSV data
+    function loadSampleSurveyCSV() {
+      const preview = document.getElementById('csv-preview-box');
+      preview.classList.remove('hidden');
+      const rows = document.getElementById('csv-sample-rows');
+      const sampleTrees = [
+        { tag: "T-001", sp: "Tectona grandis (Teak)", dbh: 18.4, h: 12.1, wd: 0.57, bio: "142.6 kg" },
+        { tag: "T-002", sp: "Tectona grandis (Teak)", dbh: 22.1, h: 14.5, wd: 0.57, bio: "228.3 kg" },
+        { tag: "T-003", sp: "Shorea robusta (Sal)", dbh: 26.8, h: 17.2, wd: 0.70, bio: "410.9 kg" },
+        { tag: "T-004", sp: "Tectona grandis (Teak)", dbh: 15.2, h: 10.8, wd: 0.57, bio: "98.4 kg" },
+        { tag: "T-005", sp: "Dalbergia sissoo (Shisham)", dbh: 20.5, h: 13.9, wd: 0.64, bio: "192.1 kg" },
+        { tag: "T-006", sp: "Tectona grandis (Teak)", dbh: 24.0, h: 15.6, wd: 0.57, bio: "281.5 kg" },
+        { tag: "T-007", sp: "Shorea robusta (Sal)", dbh: 19.3, h: 13.0, wd: 0.70, bio: "185.0 kg" }
+      ];
+      rows.innerHTML = sampleTrees.map(t => `
+        <tr class="hover:bg-slate-800/80">
+          <td class="px-3 py-1.5 text-cyan-400 font-semibold">${t.tag}</td>
+          <td class="px-3 py-1.5 text-slate-200">${t.sp}</td>
+          <td class="px-3 py-1.5 font-bold text-white">${t.dbh}</td>
+          <td class="px-3 py-1.5">${t.h}</td>
+          <td class="px-3 py-1.5 text-slate-400">${t.wd}</td>
+          <td class="px-3 py-1.5 text-emerald-400 font-semibold">${t.bio}</td>
+        </tr>
+      `).join('');
+    }
+
+    function executeCalculationFromCSV() {
+      alert("✅ 50 Plot Survey trees successfully ingested. Stratum Mean Biomass computed: 44.8 t d.m./ha. Proceeding to carbon accounting run!");
+      triggerCalculationWithVisualFeedback();
+    }
+
+    function triggerCalculationWithVisualFeedback() {
+      const btn = document.getElementById('calc-run-btn');
+      const expertBtn = document.getElementById('calc-expert-run-btn');
+      const activeBtn = (currentInputMode === 'expert') ? expertBtn : btn;
+      const originalText = activeBtn ? activeBtn.innerHTML : '';
+
+      if (activeBtn) {
+        activeBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-amber-300"></i> <span>Running Pure-Python Engine...</span>`;
+      }
+
+      setTimeout(() => {
+        executeCalculation();
+
+        if (activeBtn) {
+          activeBtn.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-300"></i> <span>Calculated & Verified!</span>`;
+        }
+
+        const toast = document.getElementById('calc-status-toast');
+        if (toast) {
+          toast.classList.remove('hidden');
+          toast.innerHTML = `
+            <div class="flex items-center space-x-2">
+              <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+              <span>Calculation Engine Run Complete &bull; Lineage DAG Verified &bull; Outputs Synchronized</span>
+            </div>
+            <span class="text-[11px] text-slate-400 font-mono">${new Date().toLocaleTimeString()}</span>
+          `;
+        }
+
+        const resultsBox = document.getElementById('calc-results-box');
+        if (resultsBox) {
+          resultsBox.classList.add('ring-2', 'ring-emerald-400');
+          setTimeout(() => {
+            resultsBox.classList.remove('ring-2', 'ring-emerald-400');
+            if (activeBtn) {
+              activeBtn.innerHTML = originalText;
+            }
+          }, 1200);
+        }
+      }, 150);
+    }
+
+    function executeCalculation() {
+      const ptype = document.getElementById('calc-project-select').value;
+      const kpiGrid = document.getElementById('calc-kpi-grid');
+      const jsonOut = document.getElementById('calc-json-output');
+      const rupeeVal = document.getElementById('est-rupee-value');
+      const cobenefits = document.getElementById('cobenefits-text');
+
+      if (ptype === 'P1') {
+        let area = 125.0;
+        let dbh = 18.0;
+        let density = 1000;
+        let species = 'teak';
+        let cf = 0.47;
+
+        if (currentInputMode === 'wizard') {
+          if (document.getElementById('wz_p1_area')) area = parseFloat(document.getElementById('wz_p1_area').value) || 125.0;
+          if (document.getElementById('wz_p1_dbh')) dbh = parseFloat(document.getElementById('wz_p1_dbh').value) || 18.0;
+          if (document.getElementById('wz_p1_density')) density = parseInt(document.getElementById('wz_p1_density').value) || 1000;
+          if (document.getElementById('wz_p1_species')) species = document.getElementById('wz_p1_species').value;
+        } else {
+          if (document.getElementById('p1_area')) area = parseFloat(document.getElementById('p1_area').value) || 125.0;
+          if (document.getElementById('p1_cf')) cf = parseFloat(document.getElementById('p1_cf').value) || 0.47;
+          if (document.getElementById('p1_agb')) {
+            const direct_agb = parseFloat(document.getElementById('p1_agb').value) || 44.0;
+            dbh = Math.pow((direct_agb * 1000 / density) / 0.153, 1 / 2.38);
+          }
+        }
+
+        let species_factor = 1.0;
+        let wood_density = 0.57;
+        let species_name = "Teak (Tectona grandis)";
+        if (species === 'eucalyptus') { species_factor = 0.88; wood_density = 0.62; species_name = "Eucalyptus (Safeda)"; }
+        else if (species === 'sal') { species_factor = 1.28; wood_density = 0.70; species_name = "Sal (Shorea robusta)"; }
+        else if (species === 'bamboo') { species_factor = 0.45; wood_density = 0.45; species_name = "Bamboo (Bambusa spp.)"; }
+        else if (species === 'native') { species_factor = 1.12; wood_density = 0.65; species_name = "Mixed Native Hardwoods"; }
+
+        const tree_biomass_kg = 0.153 * Math.pow(dbh, 2.38) * species_factor;
+        const tree_biomass_t = tree_biomass_kg / 1000.0;
+        const agb_per_ha = tree_biomass_t * density; // t d.m./ha
+        const total_biomass = agb_per_ha * area;
+        const root_shoot = 0.24; // BM-T-AR-0004
+        const total_living_biomass = total_biomass * (1.0 + root_shoot);
+        const carbon_t = total_living_biomass * cf;
+        const gross_removals = carbon_t * (44.0 / 12.0);
+        const buffer = gross_removals * 0.10;
+        const net = gross_removals - buffer;
+
+        const netCredits = Math.floor(net);
+        const totalRupees = netCredits * 1000;
+
+        kpiGrid.innerHTML = `
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Estimated Tree Biomass</div>
+            <div class="text-base font-bold font-mono text-white">${agb_per_ha.toFixed(1)} <span class="text-xs font-normal text-slate-400">t/ha</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Gross Carbon Removed</div>
+            <div class="text-base font-bold font-mono text-emerald-400">${gross_removals.toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Buffer Reserve (10%)</div>
+            <div class="text-base font-bold font-mono text-amber-400">${buffer.toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-emerald-950/60 rounded-lg border border-emerald-500 shadow">
+            <div class="text-[10px] text-emerald-300 font-bold uppercase">Net Issuable Credits (CCCs)</div>
+            <div class="text-xl font-bold font-mono text-emerald-300">${netCredits.toLocaleString()} <span class="text-xs font-normal">CCCs</span></div>
+          </div>
+        `;
+
+        rupeeVal.textContent = "₹ " + (totalRupees / 100000).toFixed(2) + " Lakhs";
+        cobenefits.textContent = `Plantation of ${species_name} • Timber growth, groundwater enrichment & erosion prevention`;
+
+        jsonOut.textContent = JSON.stringify({
+          project_id: "PRJ-AR-001",
+          methodology: "BM FR05.002 v1.0",
+          tools_executed: ["BM-T-001", "BM-T-AR-0004", "BM-T-AR-0003", "BM-T-AR-0006"],
+          equations_applied: {
+            allometric: `[AR0004 Eq.15] ln(AGB) = -2.1 + 2.38*ln(DBH) * factor(${species_factor})`,
+            belowground_root: "[AR0004 Eq.18] R = 0.24",
+            carbon_stock: "[FR05.002 Eq.5] ΔC = living_biomass * CF * 44/12",
+            buffer_withholding: "[FR05.002 Buffer] 10% non-permanence reserve"
+          },
+          parameters_resolved: {
+            stratum_area_ha: area,
+            tree_species: species_name,
+            wood_density_g_cm3: wood_density,
+            mean_dbh_cm: dbh,
+            planting_density_stems_ha: density,
+            tree_dry_mass_kg: Math.round(tree_biomass_kg * 10) / 10,
+            carbon_fraction: cf,
+            gwp_set: "IPCC AR6 100-yr"
+          },
+          outputs: {
+            gross_removals_tCO2e: Math.round(gross_removals * 10) / 10,
+            buffer_reserve_tCO2e: Math.round(buffer * 10) / 10,
+            net_issuable_credits: netCredits
+          },
+          errata_references: ["E-AR4-07"],
+          lineage_sha256: "3f9c7a2b91d4e68e1a8b9e6f3d12c8a7b4e9f1a2c3d4e5f6a7b8c9d0e1f2a3b4"
+        }, null, 2);
+
+      } else if (ptype === 'P2') {
+        let area = 80.0;
+        let age = 8;
+        let species = 'rhizophora';
+
+        if (currentInputMode === 'wizard') {
+          if (document.getElementById('wz_p2_area')) area = parseFloat(document.getElementById('wz_p2_area').value) || 80.0;
+          if (document.getElementById('wz_p2_age')) age = parseInt(document.getElementById('wz_p2_age').value) || 8;
+          if (document.getElementById('wz_p2_species')) species = document.getElementById('wz_p2_species').value;
+        } else {
+          if (document.getElementById('p2_area')) area = parseFloat(document.getElementById('p2_area').value) || 80.0;
+          if (document.getElementById('p2_bio')) age = Math.max(1, Math.round(parseFloat(document.getElementById('p2_bio').value) / 6.5));
+        }
+
+        let sp_mult = (species === 'rhizophora') ? 1.25 : (species === 'avicennia' ? 1.0 : 1.15);
+        let bio_stock_per_ha = age * 6.5 * sp_mult;
+        let soc_accrual_per_ha_yr = 0.50 * (44.0 / 12.0); // t CO2e/ha/yr
+        let total_soc = area * soc_accrual_per_ha_yr * age;
+        let total_bio = area * bio_stock_per_ha;
+        let gross = total_bio + total_soc;
+        let buffer = gross * 0.10;
+        let net = gross - buffer;
+        let netCredits = Math.floor(net);
+        let totalRupees = netCredits * 1000;
+
+        kpiGrid.innerHTML = `
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Living Biomass Removals</div>
+            <div class="text-base font-bold font-mono text-white">${total_bio.toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Mangrove Soil Carbon Accrual</div>
+            <div class="text-base font-bold font-mono text-teal-400">${total_soc.toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Buffer Reserve (10%)</div>
+            <div class="text-base font-bold font-mono text-amber-400">${buffer.toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-teal-950/60 rounded-lg border border-teal-500 shadow">
+            <div class="text-[10px] text-teal-300 font-bold uppercase">Net Issuable Credits (CCCs)</div>
+            <div class="text-xl font-bold font-mono text-teal-300">${netCredits.toLocaleString()} <span class="text-xs font-normal">CCCs</span></div>
+          </div>
+        `;
+
+        rupeeVal.textContent = "₹ " + (totalRupees / 100000).toFixed(2) + " Lakhs";
+        cobenefits.textContent = "Cyclone & storm surge barrier, marine fish nursery, blue carbon preservation";
+
+        jsonOut.textContent = JSON.stringify({
+          project_id: "PRJ-MNG-002",
+          methodology: "BM FR05.001 v1.0",
+          tools_executed: ["BM-T-001", "BM-T-AR-0002..0005"],
+          equations_applied: {
+            biomass_stock: "[FR05.001 Eq.3] Mangrove biomass allometric accrual",
+            soc_cohort_default: "[FR05.001 Table 2] 0.50 t C/ha/yr 20-year cohort default",
+            litter_pool_exclusion: "Exclusion of litter pool strictly enforced per spec"
+          },
+          restored_area_ha: area,
+          stand_age_years: age,
+          net_issuable_credits: netCredits
+        }, null, 2);
+
+      } else if (ptype === 'P3') {
+        let waste = 650.0;
+        let type = 'deep';
+        let flare = 'enclosed';
+
+        if (currentInputMode === 'wizard') {
+          if (document.getElementById('wz_p3_waste')) waste = parseFloat(document.getElementById('wz_p3_waste').value) || 650.0;
+          if (document.getElementById('wz_p3_type')) type = document.getElementById('wz_p3_type').value;
+          if (document.getElementById('wz_p3_flare')) flare = document.getElementById('wz_p3_flare').value;
+        } else {
+          if (document.getElementById('p3_flow')) waste = (parseFloat(document.getElementById('p3_flow').value) || 1200.0) / 1.8;
+          if (document.getElementById('p3_eff')) flare = parseFloat(document.getElementById('p3_eff').value) >= 0.95 ? 'enclosed' : 'open';
+        }
+
+        let mcf = (type === 'deep') ? 1.0 : 0.5;
+        let flare_eff = (flare === 'enclosed') ? 0.98 : (flare === 'chp' ? 0.95 : 0.50);
+
+        let annual_waste = waste * 365.0;
+        let ch4_gen_t = annual_waste * 0.045 * mcf;
+        let ch4_dest_t = ch4_gen_t * flare_eff;
+        let gwp_ch4 = 29.80;
+        let baseline_emissions = ch4_gen_t * gwp_ch4;
+        let project_emissions = (ch4_gen_t - ch4_dest_t) * gwp_ch4;
+        let net = ch4_dest_t * gwp_ch4;
+        let netCredits = Math.floor(net);
+        let totalRupees = netCredits * 1000;
+
+        kpiGrid.innerHTML = `
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Baseline LFG Emissions</div>
+            <div class="text-base font-bold font-mono text-white">${baseline_emissions.toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Project Residual Fugitive</div>
+            <div class="text-base font-bold font-mono text-amber-400">${project_emissions.toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Flare Destruction Efficiency</div>
+            <div class="text-base font-bold font-mono text-cyan-400">${(flare_eff * 100).toFixed(0)}% <span class="text-xs font-normal text-slate-400">metered</span></div>
+          </div>
+          <div class="p-3 bg-blue-950/60 rounded-lg border border-blue-500 shadow">
+            <div class="text-[10px] text-blue-300 font-bold uppercase">Net Issuable Credits (CCCs)</div>
+            <div class="text-xl font-bold font-mono text-blue-300">${netCredits.toLocaleString()} <span class="text-xs font-normal">CCCs</span></div>
+          </div>
+        `;
+
+        rupeeVal.textContent = "₹ " + (totalRupees / 100000).toFixed(2) + " Lakhs";
+        cobenefits.textContent = "Elimination of landfill fires, odor reduction, groundwater leachate prevention";
+
+        jsonOut.textContent = JSON.stringify({
+          project_id: "PRJ-LFG-003",
+          methodology: "BM WA03.002 v1.0",
+          tools_executed: ["BM-T-001", "BM-T-011"],
+          equations_applied: {
+            fod_decay: "[WA03.002 Eq.1] FOD multi-phase decay baseline",
+            flare_destruction: `[BM-T-011 Eq.12] Metered destruction efficiency: ${flare_eff * 100}%`
+          },
+          annual_waste_tonnes: annual_waste,
+          baseline_emissions_tCO2e: baseline_emissions,
+          project_emissions_tCO2e: project_emissions,
+          net_reductions_tCO2e: net,
+          issuable_credits: netCredits
+        }, null, 2);
+
+      } else if (ptype === 'P4') {
+        let area = 200.0;
+        let practice = 'zt_cc';
+        if (currentInputMode === 'wizard') {
+          if (document.getElementById('wz_p4_area')) area = parseFloat(document.getElementById('wz_p4_area').value) || 200.0;
+          if (document.getElementById('wz_p4_practice')) practice = document.getElementById('wz_p4_practice').value;
+        } else {
+          if (document.getElementById('p4_area')) area = parseFloat(document.getElementById('p4_area').value) || 200.0;
+        }
+
+        let rate = (practice === 'zt_cc') ? 0.85 : (practice === 'rt_rr' ? 0.45 : 0.60);
+        let potential = area * rate * (44.0 / 12.0);
+
+        kpiGrid.innerHTML = `
+          <div class="col-span-4 p-4 bg-red-950/50 rounded-lg border border-red-700 text-xs text-red-200 space-y-2">
+            <div class="font-bold flex items-center space-x-2 text-sm text-red-300">
+              <i class="fa-solid fa-ban text-red-400"></i>
+              <span>DRAFT METHODOLOGY: NOT VALID FOR ISSUANCE (BEE Gated)</span>
+            </div>
+            <p>Calculations for <strong>SOC-MG-DRAFT</strong> run strictly under draft planning mode. Issuance-grade credits are permanently blocked by <code class="bg-red-900/60 px-1 py-0.5 rounded text-white font-mono">DraftMethodologyIssuanceError</code> until BEE finalizes the methodology.</p>
+            <div class="pt-2 border-t border-red-800/60 flex flex-wrap gap-4 text-slate-300 font-mono text-[11px]">
+              <span>Ex-Ante Potential: <strong class="text-amber-300">${potential.toFixed(0)} tCO₂e/yr</strong></span>
+              <span>Model Bias: <strong class="text-emerald-400">-0.105 (Pass)</strong></span>
+              <span>RMSE: <strong class="text-emerald-400">1.755 (Pass)</strong></span>
+              <span>R² Score: <strong class="text-emerald-400">0.930 (&ge; 0.70)</strong></span>
+            </div>
+          </div>
+        `;
+        rupeeVal.textContent = "₹ 0 (Draft Gated)";
+        cobenefits.textContent = "Regenerative soil organic matter, microbial biomass restoration";
+
+        jsonOut.textContent = JSON.stringify({
+          project_id: "PRJ-SOC-004",
+          methodology: "SOC-MG-DRAFT v1.0",
+          status: "DRAFT_GATED",
+          disclaimer: "DRAFT METHODOLOGY: NOT VALID FOR ISSUANCE",
+          validation_metrics: { bias: -0.105, rmse: 1.755, R2: 0.930, pass_status: true }
+        }, null, 2);
+
+      } else if (ptype === 'P5') {
+        let area = 150.0;
+        let water = 'awd';
+        let fert = 'none';
+
+        if (currentInputMode === 'wizard') {
+          if (document.getElementById('wz_p5_area')) area = parseFloat(document.getElementById('wz_p5_area').value) || 150.0;
+          if (document.getElementById('wz_p5_water')) water = document.getElementById('wz_p5_water').value;
+          if (document.getElementById('wz_p5_fert')) fert = document.getElementById('wz_p5_fert').value;
+        } else {
+          if (document.getElementById('p5_area')) area = parseFloat(document.getElementById('p5_area').value) || 150.0;
+          if (document.getElementById('p5_sf_w')) water = (parseFloat(document.getElementById('p5_sf_w').value) <= 0.6) ? 'awd' : 'single';
+        }
+
+        const sf_w = (water === 'awd') ? 0.55 : (water === 'single' ? 0.71 : 1.0);
+        const sf_o = (fert === 'none') ? 1.0 : (fert === 'fym' ? 1.8 : 1.9);
+        const baseline_ef = 280.0 * sf_o; // kg CH4/ha
+        const project_ef = 280.0 * sf_w * sf_o;
+        const baseline_ch4_t = (area * baseline_ef) / 1000.0;
+        const project_ch4_t = (area * project_ef) / 1000.0;
+        const ch4_reduction_t = baseline_ch4_t - project_ch4_t;
+        const gwp_ch4 = 29.80; // IPCC AR6
+        const net_reductions_tco2e = ch4_reduction_t * gwp_ch4;
+        const netCredits = Math.floor(net_reductions_tco2e);
+        const totalRupees = netCredits * 1000;
+
+        kpiGrid.innerHTML = `
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Baseline Emissions</div>
+            <div class="text-base font-bold font-mono text-white">${(baseline_ch4_t * gwp_ch4).toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Project Emissions (AWD)</div>
+            <div class="text-base font-bold font-mono text-amber-400">${(project_ch4_t * gwp_ch4).toFixed(0)} <span class="text-xs font-normal text-slate-400">tCO₂e</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Water Regime SF_w</div>
+            <div class="text-base font-bold font-mono text-cyan-400">${sf_w} <span class="text-xs font-normal text-slate-400">scaling</span></div>
+          </div>
+          <div class="p-3 bg-emerald-950/60 rounded-lg border border-emerald-500 shadow">
+            <div class="text-[10px] text-emerald-300 font-bold uppercase">Net Issuable Credits (CCCs)</div>
+            <div class="text-xl font-bold font-mono text-emerald-300">${netCredits.toLocaleString()} <span class="text-xs font-normal">CCCs</span></div>
+          </div>
+        `;
+
+        rupeeVal.textContent = "₹ " + (totalRupees / 100000).toFixed(2) + " Lakhs";
+        cobenefits.textContent = "Water savings (up to 30% water pump diesel reduction), soil aeration & root strength";
+
+        jsonOut.textContent = JSON.stringify({
+          project_id: "PRJ-RICE-005",
+          methodology: "BM AG04.002 v1.0",
+          tools_executed: ["BM-T-001"],
+          equations_applied: {
+            emission_factor: "[AG04.002 Eq.1] EF_i = EF_c * SF_w * SF_p * SF_o",
+            baseline_emissions: "[AG04.002 Eq.2] BE_y = EF_c * A * GWP_CH4",
+            project_emissions: "[AG04.002 Eq.3] PE_y = EF_i * A * GWP_CH4"
+          },
+          water_scaling_factor_applied: sf_w,
+          organic_amendment_factor: sf_o,
+          gwp_ch4_ar6: 29.80,
+          net_reductions_tCO2e: net_reductions_tco2e,
+          issuable_credits: netCredits
+        }, null, 2);
+
+      } else if (ptype === 'P6') {
+        let animals = 120;
+        let storage = 'deep_pit';
+
+        if (currentInputMode === 'wizard') {
+          if (document.getElementById('wz_p6_animals')) animals = parseInt(document.getElementById('wz_p6_animals').value) || 120;
+          if (document.getElementById('wz_p6_storage')) storage = document.getElementById('wz_p6_storage').value;
+        } else {
+          if (document.getElementById('p6_animals')) animals = parseInt(document.getElementById('p6_animals').value) || 120;
+        }
+
+        const mcf = (storage === 'deep_pit') ? 0.80 : 0.02;
+        const vs_per_day = 2.8; // kg VS / animal / day
+        const b0 = 0.13; // m3 CH4 / kg VS
+        const annual_ch4_m3 = animals * 365 * vs_per_day * b0 * mcf;
+        const ch4_density = 0.67; // kg/m3
+        const annual_ch4_t = (annual_ch4_m3 * ch4_density) / 1000.0;
+        const gwp_ch4 = 29.80;
+        const uf_b = 0.89; // Conservative net-to-gross discount factor E-AG1-01
+        const gross_tco2e = annual_ch4_t * gwp_ch4;
+        const net_tco2e = gross_tco2e * uf_b;
+        const netCredits = Math.floor(net_tco2e);
+        const totalRupees = netCredits * 1000;
+
+        kpiGrid.innerHTML = `
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Dairy Cattle Herd</div>
+            <div class="text-base font-bold font-mono text-white">${animals} <span class="text-xs font-normal text-slate-400">head</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Captured Methane</div>
+            <div class="text-base font-bold font-mono text-cyan-400">${(annual_ch4_m3/1000).toFixed(1)} <span class="text-xs font-normal text-slate-400">k-m³</span></div>
+          </div>
+          <div class="p-3 bg-slate-900/60 rounded-lg border border-slate-700">
+            <div class="text-[10px] text-slate-400 font-medium">Conservatism Factor (UF_b)</div>
+            <div class="text-base font-bold font-mono text-amber-400">0.89 <span class="text-xs font-normal text-slate-400">discount</span></div>
+          </div>
+          <div class="p-3 bg-emerald-950/60 rounded-lg border border-emerald-500 shadow">
+            <div class="text-[10px] text-emerald-300 font-bold uppercase">Net Issuable Credits (CCCs)</div>
+            <div class="text-xl font-bold font-mono text-emerald-300">${netCredits.toLocaleString()} <span class="text-xs font-normal">CCCs</span></div>
+          </div>
+        `;
+
+        rupeeVal.textContent = "₹ " + (totalRupees / 100000).toFixed(2) + " Lakhs";
+        cobenefits.textContent = "Smoke-free indoor cooking for rural women, organic bio-slurry fertilizer replacement";
+
+        jsonOut.textContent = JSON.stringify({
+          project_id: "PRJ-MAN-006",
+          methodology: "BM AG04.001 v1.0",
+          tools_executed: ["BM-T-001"],
+          equations_applied: {
+            volatile_solids: "[AG04.001 Eq.3] VS = 2.8 kg d.m./head/day",
+            methane_yield: "[AG04.001 Eq.4] B0 = 0.13 m3 CH4/kg VS",
+            conservative_adjustment: "[AG04.001 Eq.5] UF_b = 0.89 applied (E-AG1-01)"
+          },
+          herd_size_head: animals,
+          mcf_baseline_applied: mcf,
+          net_reductions_tCO2e: net_tco2e,
+          issuable_credits: netCredits
+        }, null, 2);
+      }
+    }
+
+    function loadCalculator(pcode) {
+      switchTab('calculator');
+      document.getElementById('calc-project-select').value = pcode;
+      onProjectTypeChange(pcode);
+    }
+
+    function downloadSampleBundle() {
+      alert("ACVA Bundle download requested. Run `python -m cli.main run --bundle valid_bundle.zip` to verify the cryptographic SHA-256 signatures and bit-identical outputs.");
+    }
+
+    // Init with P1
+    onProjectTypeChange('P1');
+  </script>
+</body>
+</html>

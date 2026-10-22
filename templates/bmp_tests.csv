@@ -1,0 +1,2 @@
+sample_id,waste_type,lab,method_standard,sample_mass_g,bmp_t_ch4_per_t,test_end_date
+BMP-01,MSW,<NABL lab>,<standard>,600,0.035,2027-03-01

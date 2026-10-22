@@ -1,0 +1,2 @@
+sample_id,site_id,date,total_mass_kg,food_kg,paper_cardboard_kg,textiles_kg,garden_park_kg,wood_kg,inert_kg,other_kg
+WC-001,SWDS-01,2027-01-10,100,55,9,3,10,3,20,0

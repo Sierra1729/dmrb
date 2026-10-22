@@ -1,0 +1,2 @@
+record_id,year,source_parcel_id,activity,area_ha,receiving_land_id,zero_leakage_case,receiving_pre_land_use,receiving_pre_management,receiving_pre_input,receiving_post_land_use,receiving_post_management,receiving_post_input
+D-001,1,PAR-12,crop,15.0,unidentified,none,grassland,moderately_degraded,low_medium,cropland_long_term,full_tillage,low

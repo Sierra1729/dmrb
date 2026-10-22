@@ -1,0 +1,23 @@
+- id: ALLO-TECGRA-01
+  species_codes: [TECGRA]
+  form: "exp(a + b*ln(dbh_cm))"
+  params: {a: -2.10, b: 2.38}
+  inputs: {dbh_cm: cm}
+  output_unit: kg
+  valid_dbh_cm: [5.0, 150.0]
+
+- id: ALLO-DALSI-01
+  species_codes: [DALSI]
+  form: "exp(a + b*ln(dbh_cm))"
+  params: {a: -2.25, b: 2.45}
+  inputs: {dbh_cm: cm}
+  output_unit: kg
+  valid_dbh_cm: [5.0, 150.0]
+
+- id: ALLO-ACACAT-01
+  species_codes: [ACACAT]
+  form: "exp(a + b*ln(dbh_cm))"
+  params: {a: -2.30, b: 2.40}
+  inputs: {dbh_cm: cm}
+  output_unit: kg
+  valid_dbh_cm: [5.0, 150.0]

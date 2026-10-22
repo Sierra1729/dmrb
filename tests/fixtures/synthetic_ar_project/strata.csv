@@ -1,0 +1,4 @@
+stratum_id,project_id,scenario,name,area_ha_declared,geometry_wkt,climate_zone,soil_class,land_use,management,input_level,crown_cover_tree,crown_cover_shrub
+S1,PRJ-SYNTH-01,PROJ,Teak Plantation,60.0,"POLYGON((79.080 21.140, 79.090 21.140, 79.090 21.150, 79.080 21.150, 79.080 21.140))",tropical_moist,LAC,plantation,medium,medium,0.05,0.08
+S2,PRJ-SYNTH-01,PROJ,Degraded Forest Enrichment,40.0,"POLYGON((79.100 21.160, 79.110 21.160, 79.110 21.170, 79.100 21.170, 79.100 21.160))",tropical_moist,LAC,degraded_forest,low,low,0.04,0.12
+S3,PRJ-SYNTH-01,PROJ,Agroforestry Pasture,25.0,"POLYGON((79.120 21.180, 79.130 21.180, 79.130 21.190, 79.120 21.190, 79.120 21.180))",tropical_moist,LAC,agroforestry,medium,medium,0.02,0.06

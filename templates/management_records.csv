@@ -1,0 +1,2 @@
+field_id,season,crop,sowing_date,harvest_date,yield_kg_ha,tillage_events,cover_crop_species,seed_kg_ha,n_fert_kg,organic_inputs_t,fuel_diesel_l,electricity_kwh_grid,agrochemicals_kg
+FLD-0001,kharif-2027,rice,2027-06-20,2027-10-25,4100,0,,,95,0,22,0,1.2

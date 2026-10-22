@@ -1,0 +1,10 @@
+# Example entry. form is evaluated in a sandboxed expression evaluator (no eval of arbitrary code).
+- id: ALLO-TECGRA-01
+  species_codes: [TECGRA]
+  form: "exp(a + b*ln(dbh_cm))"      # returns AGB in kg
+  params: {a: -2.0, b: 2.4}           # placeholder values: replace with the cited equation
+  inputs: {dbh_cm: cm}
+  output_unit: kg
+  valid_dbh_cm: [5, 60]
+  source: "<author, year, title, page>"
+  appropriateness_status: not_tested  # not_tested | passed | failed (A/R appropriateness tool)

@@ -1,0 +1,4 @@
+plot_id,sample_date,n_frames,frame_area_m2,composite_wet_kg,subsample_wet_g,subsample_dry_g
+P-S1-001,2026-11-10,4,0.5,1.8,500.0,220.0
+P-S2-001,2026-11-11,4,0.5,2.1,500.0,240.0
+P-S3-001,2026-11-12,4,0.5,1.2,500.0,200.0
