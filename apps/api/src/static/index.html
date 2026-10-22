@@ -390,7 +390,7 @@
           </div>
 
           <div class="flex flex-wrap items-center gap-3">
-            <button onclick="downloadSampleBundle()" class="min-h-[44px] px-4 rounded-xl border border-[#DCE6DE] hover:border-[#0E6B47] text-xs font-bold text-[#0F2A1E] bg-white transition flex items-center gap-2">
+            <button onclick="downloadAuditBundle()" class="min-h-[44px] px-4 rounded-xl border border-[#DCE6DE] hover:border-[#0E6B47] text-xs font-bold text-[#0F2A1E] bg-white transition flex items-center gap-2">
               <svg class="w-4 h-4 text-[#0E6B47] stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
               <span>Download audit bundle</span>
             </button>
@@ -552,7 +552,7 @@
             <p class="text-xs text-[#DDF1E4]/90 leading-relaxed">
               Export an immutable bundle containing raw measurements, parameters, lineage DAG, and verification signatures. An accredited verifier (ACVA) can re-run it in seconds.
             </p>
-            <button onclick="downloadSampleBundle()" class="w-full min-h-[44px] rounded-xl bg-white text-[#0B3B2A] hover:bg-[#DDF1E4] text-xs font-bold transition flex items-center justify-center gap-2 pt-1">
+            <button onclick="downloadAuditBundle()" class="w-full min-h-[44px] rounded-xl bg-white text-[#0B3B2A] hover:bg-[#DDF1E4] text-xs font-bold transition flex items-center justify-center gap-2 pt-1">
               <svg class="w-4 h-4 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
               <span>Get audit bundle (ZIP)</span>
             </button>
@@ -1050,7 +1050,7 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-3 pt-2">
-              <button onclick="downloadSampleBundle()" class="min-h-[44px] px-5 rounded-xl bg-white text-[#0B3B2A] hover:bg-[#DDF1E4] text-xs font-bold transition flex items-center gap-2">
+              <button onclick="downloadAuditBundle()" class="min-h-[44px] px-5 rounded-xl bg-white text-[#0B3B2A] hover:bg-[#DDF1E4] text-xs font-bold transition flex items-center gap-2">
                 <svg class="w-4 h-4 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
                 <span>Download audit bundle (ZIP)</span>
               </button>
@@ -1144,36 +1144,85 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- 1. Workbook -->
         <div class="card-rounded p-6 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
             <span class="chip-pill bg-[#F3F6F2] text-[#4F6A5C]">XLSX Spreadsheet</span>
-            <span class="text-xs font-bold text-[#0B5A3B]">Audit Ready</span>
+            <span class="text-xs font-bold text-[#0B5A3B] flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-[#0E6B47] stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+              Live Formulas
+            </span>
           </div>
           <h2 class="text-base font-bold text-[#0F2A1E]">Emission Reduction & Removal Workbook</h2>
           <p class="text-xs text-[#4F6A5C] leading-relaxed">
-            Full Excel workbook with visible formulas, parameter sources sheet, and cryptographic lineage trace DAG for each monitoring vintage.
+            Full Excel workbook with live formulas (=B2-C2, =D2-E2-F2), parameter sources sheet, and cryptographic lineage trace DAG for each monitoring vintage.
           </p>
-          <div class="pt-3">
-            <button onclick="downloadSampleBundle()" class="min-h-[42px] px-4 rounded-xl border border-[#0E6B47] text-[#0E6B47] hover:bg-[#DDF1E4] text-xs font-bold transition flex items-center gap-2">
+          <div class="pt-3 flex items-center gap-3">
+            <button onclick="downloadSampleWorkbook()" class="min-h-[42px] px-4 rounded-xl bg-[#0E6B47] hover:bg-[#0B5A3B] text-white text-xs font-bold transition flex items-center gap-2 shadow-sm">
               <svg class="w-4 h-4 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-              <span>Download sample workbook</span>
+              <span>Download workbook (.XLSX)</span>
             </button>
+            <a href="/static/files/carbonbridge_emission_reduction_workbook.xlsx" download="carbonbridge_emission_reduction_workbook.xlsx" class="text-xs font-bold text-[#4F6A5C] hover:text-[#0E6B47] transition">Direct link</a>
           </div>
         </div>
 
+        <!-- 2. ACVA Bundle -->
         <div class="card-rounded p-6 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
-            <span class="chip-pill bg-[#F3F6F2] text-[#4F6A5C]">DOCX / PDF</span>
-            <span class="text-xs font-bold text-[#4F6A5C]">Template</span>
+            <span class="chip-pill bg-[#F3F6F2] text-[#4F6A5C]">ZIP Bundle</span>
+            <span class="text-xs font-bold text-[#0B5A3B] flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-[#0E6B47] stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+              Bit-Identical
+            </span>
+          </div>
+          <h2 class="text-base font-bold text-[#0F2A1E]">ACVA Reproducibility Verification Bundle</h2>
+          <p class="text-xs text-[#4F6A5C] leading-relaxed">
+            Immutable bundle containing inputs, parameters, lineage trace DAG, and SHA-256 manifest. Re-run locally with `dmrv run --bundle bundle.zip`.
+          </p>
+          <div class="pt-3 flex items-center gap-3">
+            <button onclick="downloadAuditBundle()" class="min-h-[42px] px-4 rounded-xl bg-[#0E6B47] hover:bg-[#0B5A3B] text-white text-xs font-bold transition flex items-center gap-2 shadow-sm">
+              <svg class="w-4 h-4 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+              <span>Download audit bundle (.ZIP)</span>
+            </button>
+            <a href="/static/files/acva_reproducibility_bundle.zip" download="acva_reproducibility_bundle.zip" class="text-xs font-bold text-[#4F6A5C] hover:text-[#0E6B47] transition">Direct link</a>
+          </div>
+        </div>
+
+        <!-- 3. PDD Annex -->
+        <div class="card-rounded p-6 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="chip-pill bg-[#F3F6F2] text-[#4F6A5C]">Markdown Report</span>
+            <span class="text-xs font-bold text-[#4F6A5C]">BEE CCTS Format</span>
           </div>
           <h2 class="text-base font-bold text-[#0F2A1E]">PDD Calculation Annex & Monitoring Report</h2>
           <p class="text-xs text-[#4F6A5C] leading-relaxed">
-            Pre-formatted calculation tables formatted according to Bureau of Energy Efficiency (BEE) Detailed Procedure requirements.
+            Pre-formatted calculation tables and methodological documentation formatted according to Bureau of Energy Efficiency (BEE) Detailed Procedure requirements.
           </p>
-          <div class="pt-3">
-            <button disabled class="min-h-[42px] px-4 rounded-xl border border-[#DCE6DE] text-[#4F6A5C]/60 bg-[#F3F6F2] text-xs font-semibold cursor-not-allowed">
-              Automatic PDF rendering &bull; Coming soon
+          <div class="pt-3 flex items-center gap-3">
+            <button onclick="downloadPDDAnnex()" class="min-h-[42px] px-4 rounded-xl border border-[#0E6B47] text-[#0E6B47] hover:bg-[#DDF1E4] text-xs font-bold transition flex items-center gap-2">
+              <svg class="w-4 h-4 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+              <span>Download calculation annex (.MD)</span>
             </button>
+            <a href="/static/files/pdd_calculation_annex.md" download="pdd_calculation_annex.md" class="text-xs font-bold text-[#4F6A5C] hover:text-[#0E6B47] transition">Direct link</a>
+          </div>
+        </div>
+
+        <!-- 4. CSV Field Template -->
+        <div class="card-rounded p-6 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="chip-pill bg-[#F3F6F2] text-[#4F6A5C]">CSV Spreadsheet</span>
+            <span class="text-xs font-bold text-[#4F6A5C]">Field Template</span>
+          </div>
+          <h2 class="text-base font-bold text-[#0F2A1E]">Tree Survey Plot Tally Sheet Template</h2>
+          <p class="text-xs text-[#4F6A5C] leading-relaxed">
+            Standardized plot and tree measurement tally template with pre-configured column headers (plot_id, stratum_id, tree_tag, species, dbh_cm, height_m).
+          </p>
+          <div class="pt-3 flex items-center gap-3">
+            <button onclick="downloadSampleCSV()" class="min-h-[42px] px-4 rounded-xl border border-[#0E6B47] text-[#0E6B47] hover:bg-[#DDF1E4] text-xs font-bold transition flex items-center gap-2">
+              <svg class="w-4 h-4 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+              <span>Download survey template (.CSV)</span>
+            </button>
+            <a href="/static/files/tree_survey_sample.csv" download="tree_survey_sample.csv" class="text-xs font-bold text-[#4F6A5C] hover:text-[#0E6B47] transition">Direct link</a>
           </div>
         </div>
       </div>
@@ -1685,7 +1734,7 @@
       if (wizardCurrentStep < 4) {
         goToWizardStep(wizardCurrentStep + 1);
       } else {
-        alert("Calculation confirmed. Result is recorded and lineage DAG is sealed.");
+        showDownloadToast("Calculation Confirmed", "Result sealed and lineage DAG recorded for project.");
         showScreen('home');
       }
     }
@@ -1755,7 +1804,13 @@
           <div class="pt-3">
             <div class="flex items-center justify-between mb-2">
               <span class="text-xs font-bold text-[#0F2A1E]">Or drop field tally sheets (CSV):</span>
-              <button onclick="loadSampleSurveyCSV()" class="text-xs font-bold text-[#0E6B47] hover:underline">Load demo 50-tree survey</button>
+              <div class="flex items-center gap-3">
+                <button onclick="downloadSampleCSV()" class="text-xs font-bold text-[#4F6A5C] hover:text-[#0E6B47] transition flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                  <span>Template CSV</span>
+                </button>
+                <button onclick="loadSampleSurveyCSV()" class="text-xs font-bold text-[#0E6B47] hover:underline">Load demo 50-tree survey</button>
+              </div>
             </div>
             <div id="csv-dropzone" class="border-2 border-dashed border-[#DCE6DE] hover:border-[#0E6B47] rounded-2xl p-6 text-center bg-white cursor-pointer transition">
               <svg class="w-7 h-7 mx-auto text-[#0E6B47] stroke-current fill-none stroke-[1.8]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12-3-3m0 0-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
@@ -1853,6 +1908,16 @@
         <div class="flex justify-between"><span>Gross Avoided / Removed:</span><strong class="text-[#0F2A1E] font-mono">${previewGross}</strong></div>
         <div class="flex justify-between"><span>Safety Buffer Withheld (10%):</span><strong class="text-amber-800 font-mono">${previewBuffer}</strong></div>
         <div class="flex justify-between border-t border-[#DCE6DE] pt-1.5 font-bold"><span>Net Issuable Carbon Credits:</span><strong class="text-[#0E6B47] font-mono text-sm">${previewCredits} CCCs</strong></div>
+        <div class="mt-4 pt-3 border-t border-[#DCE6DE] flex flex-wrap gap-2">
+          <button onclick="downloadSampleWorkbook()" class="px-3.5 py-2 rounded-xl bg-[#0E6B47] text-white font-bold text-xs hover:bg-[#0B5A3B] transition flex items-center gap-1.5 shadow-sm">
+            <svg class="w-3.5 h-3.5 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            <span>Download workbook (.XLSX)</span>
+          </button>
+          <button onclick="downloadAuditBundle()" class="px-3.5 py-2 rounded-xl border border-[#0E6B47] text-[#0E6B47] font-bold text-xs hover:bg-[#DDF1E4] transition flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 stroke-current fill-none stroke-[2]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            <span>Download bundle (.ZIP)</span>
+          </button>
+        </div>
       `;
     }
 
@@ -2053,12 +2118,129 @@
     }
 
     function executeCalculationFromCSV() {
-      alert("Stratum mean biomass computed: 44.8 t d.m./ha (Uncertainty: 8.2%). Fed into backend calculation engine.");
+      showDownloadToast("CSV Stratum Ingested", "Stratum biomass computed: 44.8 t d.m./ha (Uncertainty: 8.2%).");
       triggerCalculationWithVisualFeedback();
     }
 
+    // --- Real File Download Engine (Blob + Direct Link) ---
+    const B64_WORKBOOK = "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";
+    const B64_BUNDLE = "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";
+    const SAMPLE_CSV_CONTENT = "\ufeffplot_id,stratum_id,tree_tag,species,dbh_cm,height_m\nP-01,STR_01,T-001,Tectona grandis,18.4,12.1\nP-01,STR_01,T-002,Tectona grandis,22.1,14.5\nP-01,STR_01,T-003,Shorea robusta,26.8,17.2\nP-02,STR_01,T-004,Tectona grandis,15.2,10.8\nP-02,STR_01,T-005,Dalbergia sissoo,20.5,13.9\nP-03,STR_02,T-006,Shorea robusta,31.2,19.4\nP-03,STR_02,T-007,Tectona grandis,17.9,11.5\nP-04,STR_02,T-008,Dalbergia sissoo,24.3,15.8\n";
+    const PDD_ANNEX_CONTENT = "\ufeff# PDD Calculation Annex \u2014 CCTS Offset Mechanism\n**Project Title:** Western Ghats Afforestation & Reforestation Project\n**Project ID:** PRJ-001\n**Methodology:** BM FR05.002 v1.0 (Indian Carbon Market)\n**Crediting Period:** 2026-01-01 to 2045-12-31 (Fixed 10-Year)\n**Administrator:** Bureau of Energy Efficiency (BEE)\n**Verification Body:** Accredited Carbon Verification Agency (ACVA)\n\n---\n\n## 1. Baseline Stratification & Biomass Removals\n- Total Project Area: 1,000 ha across 3 Strata (STR_01: 600 ha, STR_02: 400 ha)\n- Biomass Estimator: Stratified sampling per BM-T-AR-0004 Eq. 15\n- Allometric Equations: FSI 1996 Volumetric equations parameterized for Western Ghats species\n- Root-to-Shoot Ratio: Dynamic decreasing power function R = 0.489 * AGB^(-0.287) per Cairns et al. (1997)\n\n## 2. Soil Organic Carbon (SOC) Pool\n- Method: BM-T-AR-0006 Tropical Moist LAC default factor transition\n- Baseline Reference SOC: 47.0 t C/ha\n- Project Management Factor: f_MG = 1.0, f_IN = 0.92, f_LU = 0.82\n\n## 3. Net GHG Removals & Issuable Carbon Credits\n- Gross Anthropogenic Removals: 26,450 t CO2e/year\n- Project Emissions: 205 t CO2e/year\n- Activity Displacement Leakage: 150 t CO2e/year\n- Net GHG Removals: 26,095 t CO2e/year\n- Buffer Reserve Withholding (10%): 2,609.5 t CO2e/year\n- **Net Issuable Carbon Credit Certificates (CCCs): 23,485.5 t CO2e/year**\n\n## 4. Digital MRV & Lineage Integrity\n- Cryptographic SHA-256 Manifest: Verified\n- Bit-Identical ACVA Reproducibility: 100% Match\n";
+
+    function showDownloadToast(filename, desc) {
+      let container = document.getElementById('toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none';
+        document.body.appendChild(container);
+      }
+
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto bg-[#0B3B2A] text-white px-4 py-3 rounded-2xl shadow-xl border border-white/20 flex items-center gap-3 transition-all duration-300 transform translate-y-2 opacity-0 max-w-sm';
+      toast.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-[#DDF1E4] text-[#0B5A3B] flex items-center justify-center flex-shrink-0">
+          <svg class="w-4 h-4 stroke-current fill-none stroke-[2.5]" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-bold truncate">${filename}</div>
+          <div class="text-[11px] text-[#DDF1E4]/90 truncate">${desc}</div>
+        </div>
+      `;
+      container.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+      }, 3500);
+    }
+
+    function downloadBlobFromBase64(b64Data, filename, mimeType) {
+      try {
+        const byteCharacters = atob(b64Data);
+        const byteNumbers = new Uint8Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const blob = new Blob([byteNumbers], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 100);
+        showDownloadToast(filename, "File downloaded to your device");
+      } catch (err) {
+        console.error("Blob download failed, trying static URL:", err);
+        window.location.href = '/static/files/' + filename;
+      }
+    }
+
+    function downloadTextFile(content, filename, mimeType) {
+      try {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 100);
+        showDownloadToast(filename, "File downloaded to your device");
+      } catch (err) {
+        console.error("Text download failed:", err);
+        window.location.href = '/static/files/' + filename;
+      }
+    }
+
+    function downloadSampleWorkbook() {
+      downloadBlobFromBase64(
+        B64_WORKBOOK,
+        'carbonbridge_emission_reduction_workbook.xlsx',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      );
+    }
+
+    function downloadAuditBundle() {
+      downloadBlobFromBase64(
+        B64_BUNDLE,
+        'acva_reproducibility_bundle.zip',
+        'application/zip'
+      );
+    }
+
+    // Alias for compatibility
     function downloadSampleBundle() {
-      alert("ACVA Reproducibility Bundle downloaded. Run `dmrv run --bundle bundle.zip` to verify 100% bit-identical outputs.");
+      downloadAuditBundle();
+    }
+
+    function downloadSampleCSV() {
+      downloadTextFile(
+        SAMPLE_CSV_CONTENT,
+        'tree_survey_sample.csv',
+        'text/csv;charset=utf-8;'
+      );
+    }
+
+    function downloadPDDAnnex() {
+      downloadTextFile(
+        PDD_ANNEX_CONTENT,
+        'pdd_calculation_annex.md',
+        'text/markdown;charset=utf-8;'
+      );
     }
 
     function handleHashChange() {

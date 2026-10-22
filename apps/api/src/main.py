@@ -13,6 +13,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 
 @asynccontextmanager
@@ -85,4 +86,10 @@ def get_dashboard_ui():
     if static_file.exists():
         return HTMLResponse(content=static_file.read_text(encoding="utf-8"))
     return HTMLResponse(content="<h1>dMRV Platform</h1>")
+
+
+# Serve static assets and report downloads
+_static_dir = Path(__file__).parent / "static"
+if _static_dir.exists():
+    app.mount("/static", StaticFiles(directory=_static_dir), name="static")
 

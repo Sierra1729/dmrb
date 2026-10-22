@@ -1,0 +1,9 @@
+﻿plot_id,stratum_id,tree_tag,species,dbh_cm,height_m
+P-01,STR_01,T-001,Tectona grandis,18.4,12.1
+P-01,STR_01,T-002,Tectona grandis,22.1,14.5
+P-01,STR_01,T-003,Shorea robusta,26.8,17.2
+P-02,STR_01,T-004,Tectona grandis,15.2,10.8
+P-02,STR_01,T-005,Dalbergia sissoo,20.5,13.9
+P-03,STR_02,T-006,Shorea robusta,31.2,19.4
+P-03,STR_02,T-007,Tectona grandis,17.9,11.5
+P-04,STR_02,T-008,Dalbergia sissoo,24.3,15.8
